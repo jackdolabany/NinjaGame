@@ -270,28 +270,18 @@ namespace TileEngine
             }
         }
 
-        public void DrawParallaxScrollingLayer(SpriteBatch spriteBatch)
+        public void DrawParallaxScrollingLayer(SpriteBatch spriteBatch, Rectangle scaledViewPort)
         {
-            Draw(spriteBatch, true);
+            Draw(spriteBatch, scaledViewPort, true);
         }
 
-        public void Draw(SpriteBatch spriteBatch, bool isDrawingParallaxLayer = false)
+        public void Draw(SpriteBatch spriteBatch, Rectangle scaledViewPort, bool isDrawingParallaxLayer = false)
         {
-            Rectangle svp;
 
-            if (isDrawingParallaxLayer)
-            {
-                svp = Camera.ParallaxScaledViewPort;
-            }
-            else
-            {
-                svp = Camera.ScaledViewPort;
-            }
-
-            int startX = GetCellByPixelX((int)svp.X - 1);
-            int endX = GetCellByPixelX((int)svp.Right + 1);
-            int startY = GetCellByPixelY((int)svp.Y - 1);
-            int endY = GetCellByPixelY((int)svp.Bottom + 1);
+            int startX = GetCellByPixelX(scaledViewPort.X - 1);
+            int endX = GetCellByPixelX(scaledViewPort.Right + 1);
+            int startY = GetCellByPixelY(scaledViewPort.Y - 1);
+            int endY = GetCellByPixelY(scaledViewPort.Bottom + 1);
 
             for (int z = 0; z < MapDepth; z++)
             {

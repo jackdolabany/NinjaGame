@@ -43,7 +43,7 @@ namespace NinjaGame
 
         public abstract void Draw(SpriteBatch spriteBatch);
 
-        public virtual void Update(float elapsed, Vector2 position, bool flipped)
+        public virtual void Update(GameTime gameTime, float elapsed, Vector2 position, bool flipped)
         {
             this.Flipped = flipped;
         }

@@ -9,27 +9,49 @@ using TileEngine;
 
 namespace NinjaGame
 {
-    public static class Camera
+    public class Camera
     {
-        private static Vector2 position = Vector2.Zero;
-        private static Vector2 viewPortSize = Vector2.Zero;
-        public static float Zoom; // Camera Zoom
-        public static Matrix Transform; // Matrix Transform
-        public static float Rotation; // Camera Rotation
-        public static TileMap Map { get; set; }
-        public static bool IsMaxed;
-        public static float Velocity { get; set; }
+        private Vector2 position = Vector2.Zero;
+        private Vector2 viewPortSize = Vector2.Zero;
+        public float Zoom; // Camera Zoom
+        public Matrix Transform; // Matrix Transform
+        public float Rotation; // Camera Rotation
+
+        private TileMap _map;
+        public TileMap Map
+        {
+            get
+            {
+                return _map;
+            }
+            set
+            {
+                _map = value;
+                WorldRectangle = _map.GetWorldRectangle();
+
+                var zoom = _map.Zoom;
+                if (zoom == 0)
+                {
+                    zoom = 1;
+                }
+
+                Zoom = _map.Zoom * DEFAULT_ZOOM;
+            }
+        }
+
+        public bool IsMaxed;
+        public float Velocity { get; set; }
 
         public const float DEFAULT_ZOOM = 1f;
 
-        static Camera()
+        public Camera()
         {
             Velocity = 30f;
         }
 
-        public static Vector2 ParallaxScale = new Vector2(0.75f, 0.75f);
+        public Vector2 ParallaxScale = new Vector2(0.75f, 0.75f);
 
-        public static void UpdateTransformation(GraphicsDevice graphicsDevice)
+        public void UpdateTransformation(GraphicsDevice graphicsDevice)
         {
             var translationMatrix = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0));
             var rotationMatrix = Matrix.CreateRotationZ(Rotation);
@@ -39,7 +61,7 @@ namespace NinjaGame
             Transform = translationMatrix * rotationMatrix * scaleMatrix * originMatrix;
         }
 
-        public static Matrix GetParallaxScrollingBackgroundTransformation(GraphicsDevice graphicsDevice)
+        public Matrix GetParallaxScrollingBackgroundTransformation(GraphicsDevice graphicsDevice)
         {
             var translationMatrix = Matrix.CreateTranslation(new Vector3(-position, 0));
             var rotationMatrix = Matrix.CreateRotationZ(Rotation);
@@ -49,54 +71,52 @@ namespace NinjaGame
             return translationMatrix * rotationMatrix * scaleMatrix * originMatrix;
         }
 
-        public static void FuckEverybodyHardCodeSetPosition(Vector2 position)
-        {
-            Camera.position = position;
-        }
+        //public void FuckEverybodyHardCodeSetPosition(Vector2 position)
+        //{
+        //    Camera.position = position;
+        //}
 
-        public static Vector2 Position
+        public Vector2 Position
         {
             get { return position; }
             set
             {
 
-                // temp
-                position = new Vector2(value.X, value.Y);
-                // TODO: Check constraints against map once it exists.
+                // Check constraints against map once it exists.
 
 
-                //float x = 0;
-                //float y = 0;
+                float x = 0;
+                float y = 0;
 
-                //var mapWidth = Map.MapWidth * TileMap.TileSize;
-                //if (mapWidth < ViewWidth)
-                //{
-                //    x = mapWidth / 2;
-                //}
-                //else
-                //{
-                //    x = MathHelper.Clamp(value.X,
-                //        WorldRectangle.X + (ViewWidth / 2),
-                //        WorldRectangle.Width - (ViewWidth / 2));
-                //}
-                //var mapHeight = Map.MapHeight * TileMap.TileSize;
-                //if (mapHeight < ViewHeight)
-                //{
-                //    y = mapHeight / 2;
-                //}
-                //else
-                //{
-                //    y = MathHelper.Clamp(value.Y,
-                //        WorldRectangle.Y + (ViewHeight / 2),
-                //        WorldRectangle.Height - (ViewHeight / 2));
-                //}
+                var mapWidth = Map.MapWidth * TileMap.TileSize;
+                if (mapWidth < ViewWidth)
+                {
+                    x = mapWidth / 2;
+                }
+                else
+                {
+                    x = MathHelper.Clamp(value.X,
+                        WorldRectangle.X + (ViewWidth / 2),
+                        WorldRectangle.Width - (ViewWidth / 2));
+                }
+                var mapHeight = Map.MapHeight * TileMap.TileSize;
+                if (mapHeight < ViewHeight)
+                {
+                    y = mapHeight / 2;
+                }
+                else
+                {
+                    y = MathHelper.Clamp(value.Y,
+                        WorldRectangle.Y + (ViewHeight / 2),
+                        WorldRectangle.Height - (ViewHeight / 2));
+                }
 
-                //position = new Vector2(x, y);
+                position = new Vector2(x, y);
             }
         }
 
-        private static Rectangle _worldRectangle = new Rectangle(0, 0, 0, 0);
-        public static Rectangle WorldRectangle
+        private Rectangle _worldRectangle = new Rectangle(0, 0, 0, 0);
+        public Rectangle WorldRectangle
         {
             get
             {
@@ -108,7 +128,7 @@ namespace NinjaGame
             }
         }
 
-        public static int ViewWidth
+        public int ViewWidth
         {
             get
             {
@@ -116,7 +136,7 @@ namespace NinjaGame
             }
         }
 
-        public static int ViewHeight
+        public int ViewHeight
         {
             get
             {
@@ -124,19 +144,19 @@ namespace NinjaGame
             }
         }
 
-        public static int ViewPortWidth
+        public int ViewPortWidth
         {
             get { return (int)viewPortSize.X; }
             set { viewPortSize.X = value; }
         }
 
-        public static int ViewPortHeight
+        public int ViewPortHeight
         {
             get { return (int)viewPortSize.Y; }
             set { viewPortSize.Y = value; }
         }
 
-        public static Rectangle ViewPort
+        public Rectangle ViewPort
         {
             get
             {
@@ -146,7 +166,7 @@ namespace NinjaGame
             }
         }
 
-        public static Rectangle ScaledViewPort
+        public Rectangle ScaledViewPort
         {
             get
             {
@@ -158,7 +178,7 @@ namespace NinjaGame
             }
         }
 
-        public static Rectangle ParallaxScaledViewPort
+        public Rectangle ParallaxScaledViewPort
         {
             get
             {
@@ -171,24 +191,20 @@ namespace NinjaGame
             }
         }
 
-        #region Public Methods
-
-        public static bool IsObjectVisible(Rectangle bounds)
+        public bool IsObjectVisible(Rectangle bounds)
         {
             return ScaledViewPort.Intersects(bounds);
         }
 
-        public static Vector2 GetRelativeScreenPosition(Vector2 worldPosition)
+        public Vector2 GetRelativeScreenPosition(Vector2 worldPosition)
         {
-            return Vector2.Transform(worldPosition, Camera.Transform);
+            return Vector2.Transform(worldPosition, Transform);
         }
 
-        public static bool IsPointVisible(Vector2 point)
+        public bool IsPointVisible(Vector2 point)
         {
             return ScaledViewPort.Contains((int)point.X, (int)point.Y);
         }
-
-        #endregion
 
     }
 }

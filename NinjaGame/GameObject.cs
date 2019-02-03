@@ -11,7 +11,6 @@ namespace NinjaGame
 {
     public class GameObject
     {
-        #region Declarations
         protected Vector2 worldLocation;
 
         private bool enabled;
@@ -106,9 +105,6 @@ namespace NinjaGame
             set { this.DisplayComponent.Scale = value; }
         }
 
-        #endregion
-
-        #region Properties
         public bool Enabled
         {
             get { return enabled; }
@@ -157,7 +153,7 @@ namespace NinjaGame
         public bool IsAffectedByGravity { get; set; }
         public bool IsAffectedByPlatforms { get; set; }
 
-        public static Vector2 FALL_SPEED = new Vector2(0, 1100);
+        public static Vector2 FALL_SPEED = new Vector2(0, 1000);
 
         protected Vector2 velocity;
         public Vector2 Velocity
@@ -254,8 +250,6 @@ namespace NinjaGame
             }
         }
 
-        #endregion 
-
         public GameObject()
         {
             IsAbleToMoveOutsideOfWorld = true;
@@ -264,7 +258,283 @@ namespace NinjaGame
             IsAffectedByPlatforms = true;
         }
 
-        #region Public Methods
+        private Vector2 horizontalCollisionTest(Vector2 moveAmount)
+        {
+            if (moveAmount.X == 0)
+            {
+                return moveAmount;
+            }
+
+            onRightWall = false;
+            onLeftWall = false;
+
+            Vector2 newPosition = worldLocation;
+            newPosition.X += moveAmount.X;
+            Rectangle afterMoveRect = getCollisionRectangleForPosition(ref newPosition);
+
+            bool isMovingRight = moveAmount.X > 0;
+
+            int moveRectX = 0;
+            if (isMovingRight)
+            {
+                moveRectX = afterMoveRect.Right - 1;
+            }
+            else
+            {
+                moveRectX = afterMoveRect.Left;
+            }
+
+            //always test the corners
+            int pixelCount = 2;
+            pixelsToTest[0] = new Point(moveRectX, afterMoveRect.Top); //top corner
+            pixelsToTest[1] = new Point(moveRectX, afterMoveRect.Bottom - 1); //bottom corner
+
+            //Check some intermediate pixels if necessary.
+            if (collisionRectangle.Height > TileMap.TileSize)
+            {
+                int testY = afterMoveRect.Top + TileMap.TileSize;
+                while (testY < afterMoveRect.Bottom)
+                {
+                    var pixel = new Point(moveRectX, testY);
+                    pixelsToTest[pixelCount] = pixel;
+                    pixelCount++;
+                    testY += TileMap.TileSize;
+                }
+            }
+
+            // sorry for the player hack :(
+            bool isPlayer = this is Player;
+
+            for (int i = 0; i <= pixelCount - 1; i++)
+            {
+                var pixel = pixelsToTest[i];
+                var mapSquare = Game1.CurrentMap.GetMapSquareAtPixel(pixel.X, pixel.Y);
+
+                if (mapSquare != null && (!mapSquare.Passable || (isEnemyTileColliding && !mapSquare.EnemyPassable)))
+                {
+                    //there was a collision, place the object to the edge of the tile.
+                    if (isMovingRight)
+                    {
+                        int mapCellLeft = Game1.CurrentMap.GetCellByPixelX(pixel.X) * TileMap.TileSize;
+                        moveAmount.X = Math.Min(moveAmount.X, mapCellLeft - CollisionRectangle.Right);
+                        onRightWall = true;
+                    }
+                    else
+                    {
+                        //moving left
+                        int mapCellRight = ((Game1.CurrentMap.GetCellByPixelX(pixel.X) + 1) * TileMap.TileSize) - 1;
+                        moveAmount.X = Math.Max(moveAmount.X, mapCellRight - CollisionRectangle.Left + 1);
+                        onLeftWall = true;
+                    }
+                    velocity.X = 0;
+                }
+                else
+                {
+                    //// Check each collision block. Just some rectangles that can block spaces off
+                    //foreach (var block in LevelManager.CollisionBlocks)
+                    //{
+                    //    if (block.Enabled && ((!isPlayer && block.IsBlockingGameObjects) || (isPlayer && block.IsBlockingPlayer)) && block.Rectangle.Contains(pixel.X, pixel.Y) && block.Owner != this)
+                    //    {
+                    //        //there was a collision, place the object to the edge of the tile.
+                    //        if (isMovingRight)
+                    //        {
+                    //            moveAmount.X = Math.Min(moveAmount.X, block.Rectangle.Left - CollisionRectangle.Right);
+                    //            onRightWall = true;
+                    //        }
+                    //        else
+                    //        {
+                    //            //moving left
+                    //            moveAmount.X = Math.Max(moveAmount.X, block.Rectangle.Right - CollisionRectangle.Left + 1);
+                    //            onLeftWall = true;
+                    //        }
+                    //        velocity.X = 0;
+                    //    }
+                    //}
+                }
+            }
+
+            return moveAmount;
+        }
+
+        private Vector2 verticalCollisionTest(Vector2 moveAmount)
+        {
+            if (moveAmount.Y == 0)
+                return moveAmount;
+
+            Vector2 newPosition = worldLocation + moveAmount;
+            Rectangle afterMoveRect = getCollisionRectangleForPosition(ref newPosition);
+            Rectangle cachedCollisionRectangle = this.CollisionRectangle;
+
+            bool isFalling = moveAmount.Y >= 0;
+
+            int moveRectY = 0;
+            if (isFalling)
+            {
+                // special case, if we are falling we want to check a pixels below so that we 
+                // can set onground = true if they are 1 pixel above the ground.
+                moveRectY = afterMoveRect.Bottom;
+            }
+            else
+            {
+                moveRectY = afterMoveRect.Top;
+            }
+
+            //always test the corners
+            int pixelCount = 2;
+            pixelsToTest[0] = new Point(afterMoveRect.Left, moveRectY);
+            pixelsToTest[1] = new Point(afterMoveRect.Right - 1, moveRectY);
+
+            //Check some intermediate pixels if necessary.
+            if (collisionRectangle.Width > TileMap.TileSize)
+            {
+                int testX = afterMoveRect.Left + TileMap.TileSize;
+                while (testX < afterMoveRect.Right - 1)
+                {
+                    var pixel = new Point(testX, moveRectY);
+                    pixelsToTest[pixelCount] = pixel;
+                    pixelCount++;
+                    testX += TileMap.TileSize;
+                }
+            }
+
+            //Platform newPlatform = null;
+
+            bool previouslyOnGround = onGround;
+            onGround = false;
+            Landed = false;
+            LandingVelocity = 0f;
+
+            for (int i = 0; i <= pixelCount - 1; i++)
+            {
+                var pixel = pixelsToTest[i];
+
+                // Test non passable blocks
+                var mapSquare = Game1.CurrentMap.GetMapSquareAtPixel(pixel.X, pixel.Y);
+                if (mapSquare != null && (!mapSquare.Passable || (isEnemyTileColliding && !mapSquare.EnemyPassable)))
+                {
+                    //there was a collision, place the object to the edge of the tile.
+                    if (isFalling)
+                    {
+                        if (!previouslyOnGround)
+                        {
+                            Landed = true;
+                            LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
+                        }
+                        int mapCellTop = Game1.CurrentMap.GetCellByPixelY(pixel.Y) * TileMap.TileSize;
+                        moveAmount.Y = Math.Min(moveAmount.Y, mapCellTop - cachedCollisionRectangle.Bottom);
+                        onGround = true;
+                    }
+                    else
+                    {
+                        //moving up!
+                        int mapCellBottom = (((Game1.CurrentMap.GetCellByPixelY(pixel.Y) + 1) * TileMap.TileSize) - 1);
+                        moveAmount.Y = Math.Max(moveAmount.Y, mapCellBottom - cachedCollisionRectangle.Top + 1);
+                        onCeiling = true;
+                    }
+                    velocity.Y = 0;
+                }
+                //else
+                //{
+
+                //    // Test platforms!
+                //    if (IsAffectedByGravity && IsAffectedByPlatforms && isFalling)
+                //    {
+                //        foreach (var platform in LevelManager.Platforms)
+                //        {
+                //            if (!platform.enabled || platform == PoisonPlatform)
+                //            {
+                //                continue;
+                //            }
+
+                //            var samePlatformAsBefore = (platform == PlatformThatThisIsOn);
+
+                //            if (!samePlatformAsBefore)
+                //            {
+                //                var wasAbove = cachedCollisionRectangle.Bottom <= platform.PreviousLocation.Y;
+                //                if (!wasAbove)
+                //                {
+                //                    continue;
+                //                }
+                //            }
+
+                //            var isPlatformBelowMe = platform.CollisionRectangle.Contains(new Point(pixel.X, pixel.Y + 1));
+
+                //            // Special case for vertical moving platforms moving down, it may move faster than the GameObject
+                //            // so we need to lock the GameObject to the platform. We consider you on the platform if your X
+                //            // coordinates fall in range and if you didn't jump
+                //            bool isLockedOnVerticalMovingPlatform = false;
+                //            if (samePlatformAsBefore && platform.velocity.Y > 0)
+                //            {
+                //                isLockedOnVerticalMovingPlatform = pixel.X >= platform.CollisionRectangle.Left && pixel.X <= platform.CollisionRectangle.Right;
+                //            }
+
+                //            if (isPlatformBelowMe || isLockedOnVerticalMovingPlatform)
+                //            {
+                //                // They are on a platform.
+                //                newPlatform = platform;
+                //                onGround = true;
+                //                OnPlatform = true;
+                //                velocity.Y = 0;
+                //                if (samePlatformAsBefore)
+                //                {
+                //                    // Previous platform. The GameObject will be moved along with the platform outside of this function.
+                //                    moveAmount.Y = 0;
+                //                }
+                //                else
+                //                {
+                //                    // If a new platform was hit, adjust the position.
+                //                    moveAmount.Y = Math.Min(moveAmount.Y, platform.CollisionRectangle.Top - cachedCollisionRectangle.Bottom);
+
+                //                    if (!previouslyOnGround)
+                //                    {
+                //                        Landed = true;
+                //                        LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
+                //                    }
+
+                //                }
+                //                break;
+                //            }
+                //        }
+                //    }
+
+                //    bool isPlayer = this is Player;
+
+                //    // Check each collision block. Just some rectangles that can block spaces off
+                //    if (newPlatform == null)
+                //    {
+                //        foreach (var block in LevelManager.CollisionBlocks)
+                //        {
+                //            if (block.Enabled && ((!isPlayer && block.IsBlockingGameObjects) || (isPlayer && block.IsBlockingPlayer)) && block.Rectangle.Contains(pixel.X, pixel.Y) && block.Owner != this)
+                //            {
+                //                //there was a collision, place the object to the edge of the tile.
+                //                if (isFalling)
+                //                {
+                //                    if (!previouslyOnGround)
+                //                    {
+                //                        Landed = true;
+                //                        LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
+                //                    }
+                //                    moveAmount.Y = Math.Min(moveAmount.Y, block.Rectangle.Top - cachedCollisionRectangle.Bottom);
+                //                    onGround = true;
+                //                }
+                //                else
+                //                {
+                //                    //moving up!
+                //                    onCeiling = true;
+                //                    moveAmount.Y = Math.Max(moveAmount.Y, block.Rectangle.Bottom - cachedCollisionRectangle.Top + 1);
+                //                }
+                //                velocity.Y = 0;
+                //            }
+                //        }
+                //    }
+                //}
+            }
+
+            Landed = Landed && ((afterMoveRect.Y - cachedCollisionRectangle.Y) > 5);
+
+            //PlatformThatThisIsOn = newPlatform;
+            return moveAmount;
+        }
 
         public virtual void Flip()
         {
@@ -276,14 +546,12 @@ namespace NinjaGame
             Rotation = (float)Math.Atan2(direction.Y, direction.X);
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, float elapsed)
         {
             if (!enabled)
                 return;
 
             Vector2 previousLocation = this.worldLocation;
-
-            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (RotationsPerSecond > 0)
             {
@@ -303,18 +571,18 @@ namespace NinjaGame
 
             //var previousUpdatePlatForm = PlatformThatThisIsOn;
 
-            //if (isTileColliding)
-            //{
-            //    moveAmount = horizontalCollisionTest(moveAmount);
-            //    moveAmount = verticalCollisionTest(moveAmount);
+            if (isTileColliding)
+            {
+                moveAmount = horizontalCollisionTest(moveAmount);
+                moveAmount = verticalCollisionTest(moveAmount);
 
-            //    // They are on a platform that they were already on, move them with the platform
-            //    if (PlatformThatThisIsOn != null && PlatformThatThisIsOn == previousUpdatePlatForm)
-            //    {
-            //        moveAmount += PlatformThatThisIsOn.Delta;
-            //        moveAmount = horizontalCollisionTest(moveAmount);
-            //    }
-            //}
+                //// They are on a platform that they were already on, move them with the platform
+                //if (PlatformThatThisIsOn != null && PlatformThatThisIsOn == previousUpdatePlatForm)
+                //{
+                //    moveAmount += PlatformThatThisIsOn.Delta;
+                //    moveAmount = horizontalCollisionTest(moveAmount);
+                //}
+            }
 
             Vector2 newPosition = worldLocation + moveAmount;
 
@@ -327,9 +595,9 @@ namespace NinjaGame
                     velocity.X = 0;
                     onLeftWall = true;
                 }
-                else if (CollisionRectangle.Right > Camera.WorldRectangle.Width)
+                else if (CollisionRectangle.Right > Game1.Camera.WorldRectangle.Width)
                 {
-                    newPosition.X -= (CollisionRectangle.Right - Camera.WorldRectangle.Width);
+                    newPosition.X -= (CollisionRectangle.Right - Game1.Camera.WorldRectangle.Width);
                     velocity.X = 0;
                     onRightWall = true;
                 }
@@ -337,7 +605,7 @@ namespace NinjaGame
 
             if (!IsAbleToSurviveOutsideOfWorld)
             {
-                if (!this.CollisionRectangle.Intersects(Camera.WorldRectangle))
+                if (!this.CollisionRectangle.Intersects(Game1.Camera.WorldRectangle))
                 {
                     Enabled = false;
                 }
@@ -347,14 +615,14 @@ namespace NinjaGame
 
             worldLocation = newPosition;
 
-            DisplayComponent.Update(elapsed, this.worldLocation, this._flipped);
+            DisplayComponent.Update(gameTime, elapsed, this.worldLocation, this._flipped);
         }
 
         public virtual void AdjustPositionBeforeDraw(ref Vector2 newPosition, ref Vector2 previousLocation) { }
 
-        public void SetupDraw(float elapsed)
+        public void SetupDraw(GameTime gameTime, float elapsed)
         {
-            this.DisplayComponent.Update(elapsed, this.worldLocation, this.flipped);
+            this.DisplayComponent.Update(gameTime, elapsed, this.worldLocation, this.flipped);
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
@@ -379,8 +647,6 @@ namespace NinjaGame
                 spriteBatch.Draw(Game1.simpleSprites, new Rectangle(-rectSize / 2 + (int)location.X, -rectSize / 2 + (int)location.Y, rectSize / 2, rectSize / 2), Game1.whiteSourceRect, Color.Green);
             }
         }
-
-        #endregion
 
     }
 }

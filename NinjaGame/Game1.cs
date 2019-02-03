@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using TileEngine;
 
 namespace NinjaGame
 {
@@ -24,9 +25,26 @@ namespace NinjaGame
 
         public const int TileSize = TileEngine.TileMap.TileSize;
 
-        RenderTarget2D gameRenderTarget;
+        private static RenderTarget2D gameRenderTarget;
 
-        private Player player;
+        private static Player player;
+
+        private static SceneManager sceneManager;
+
+        private static Level currentLevel;
+
+        public static TileMap CurrentMap
+        {
+            get
+            {
+                return currentLevel.Map;
+            }
+        }
+
+        public static bool IS_DEBUG = true;
+
+        public static Camera Camera;
+        private static KeyboardState previousKeyState;
 
         public Game1()
         {
@@ -39,13 +57,6 @@ namespace NinjaGame
             //Window.
 
             Content.RootDirectory = "Content";
-
-            Camera.Position = Vector2.Zero;
-            Camera.Zoom = Camera.DEFAULT_ZOOM;
-            Camera.ViewPortWidth = Game1.GAME_X_RESOLUTION;
-            Camera.ViewPortHeight = Game1.GAME_Y_RESOLUTION;
-
-            DrawAllCollisisonRects = true;
         }
 
         /// <summary>
@@ -57,6 +68,7 @@ namespace NinjaGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            sceneManager = new SceneManager();
 
             base.Initialize();
         }
@@ -73,6 +85,21 @@ namespace NinjaGame
             simpleSprites = Content.Load<Texture2D>(@"Textures\Tiles");
             player = new Player(Content);
             gameRenderTarget = new RenderTarget2D(GraphicsDevice, GAME_X_RESOLUTION, GAME_Y_RESOLUTION, false, SurfaceFormat.Color, DepthFormat.None);
+
+            Camera = new Camera();
+
+            // Load map and adjust Camera
+            currentLevel = sceneManager.LoadLevel("TestLevel", Content, player, Camera);
+            
+
+            Camera.Map = currentLevel.Map;
+
+            // Basic Camera Setup
+            Camera.Position = Vector2.Zero;
+            Camera.Zoom = Camera.DEFAULT_ZOOM;
+            Camera.ViewPortWidth = Game1.GAME_X_RESOLUTION;
+            Camera.ViewPortHeight = Game1.GAME_Y_RESOLUTION;
+            
 
         }
 
@@ -99,9 +126,37 @@ namespace NinjaGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            player.Update(gameTime);
+            var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            currentLevel.Update(gameTime, elapsed);
+
+            
+            if (Game1.IS_DEBUG)
+            {
+                KeyboardState keyState = Keyboard.GetState();
+                if (keyState.IsKeyDown(Keys.I))
+                {
+                    Camera.Zoom += 0.4f * elapsed;
+                }
+                else if (keyState.IsKeyDown(Keys.O))
+                {
+                    Camera.Zoom -= 0.4f * elapsed;
+                }
+                else if (keyState.IsKeyDown(Keys.R))
+                {
+                    Camera.Zoom = Camera.DEFAULT_ZOOM;
+                }
+
+                if (keyState.IsKeyDown(Keys.D) && !previousKeyState.IsKeyDown(Keys.D))
+                {
+                    Game1.DrawAllCollisisonRects = !Game1.DrawAllCollisisonRects;
+                }
+                previousKeyState = keyState;
+            }
 
             base.Update(gameTime);
+
+            
         }
 
         /// <summary>
@@ -110,8 +165,6 @@ namespace NinjaGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
-
             Camera.UpdateTransformation(GraphicsDevice);
             var cameraTransformation = Camera.Transform;
 
@@ -123,7 +176,7 @@ namespace NinjaGame
                   null,
                   cameraTransformation);
 
-            player.Draw(spriteBatch);
+            currentLevel.Draw(spriteBatch, Camera.ScaledViewPort);
 
             // We'll draw everything to gameRenderTarget, including the white render target.
             GraphicsDevice.SetRenderTarget(gameRenderTarget);

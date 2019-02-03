@@ -73,9 +73,9 @@ namespace NinjaGame
             }
         }
 
-        public override void Update(float elapsed, Vector2 position, bool flipped)
+        public override void Update(GameTime gameTime, float elapsed, Vector2 position, bool flipped)
         {
-            base.Update(elapsed, position, flipped);
+            base.Update(gameTime, elapsed, position, flipped);
 
             DrawObject.Position = position;
 

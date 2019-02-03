@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\CustomContentProcessorLibrary\bin\Debug\CustomContentProcessorLibrary.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -24,4 +25,34 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/Tiles.png
+
+#begin Maps/Collisions.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Collisions.png
+
+#begin Maps/TestLevel.tmx
+/importer:TMXMapImporter
+/processor:PassThroughProcessor
+/processorParam:DebugMode=Auto
+/build:Maps/TestLevel.tmx
+
+#begin Maps/Tiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Tiles.png
 

@@ -49,6 +49,8 @@
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Level.cs" />
+    <Compile Include="SceneManager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Maps\Collisions.png" />
+    <Content Include="Content\Maps\Tiles.png" />
     <Content Include="Content\Textures\Tiles.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
@@ -69,12 +73,17 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="Content\Maps\TestLevel.tmx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TileEngine\TileEngine.csproj">
       <Project>{5319d13b-c2cc-4334-a72d-9172fbb773e8}</Project>
       <Name>TileEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Maps\Collisions.tsx" />
+    <None Include="Content\Maps\TempTiles.tsx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
