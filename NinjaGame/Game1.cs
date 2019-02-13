@@ -18,7 +18,7 @@ namespace NinjaGame
         public const int GAME_Y_RESOLUTION = 240;
 
         public static Random Randy = new Random();
-        public static bool DrawAllCollisisonRects = false;
+        public static bool DrawAllCollisisonRects = true;
 
         public static Texture2D simpleSprites;
         public static Rectangle whiteSourceRect = new Rectangle(1, 1, 1, 1).ToTileRect();
@@ -46,6 +46,11 @@ namespace NinjaGame
         public static Camera Camera;
         private static KeyboardState previousKeyState;
 
+        public static SpriteFont Font;
+
+        private TempTextObject tempText;
+        private TempObject tempObject;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -67,9 +72,7 @@ namespace NinjaGame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             sceneManager = new SceneManager();
-
             base.Initialize();
         }
 
@@ -82,8 +85,13 @@ namespace NinjaGame
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            simpleSprites = Content.Load<Texture2D>(@"Textures\Tiles");
+            simpleSprites = Content.Load<Texture2D>(@"Textures\SimpleSprites");
+
+            var rpgSystem = Content.Load<SpriteFont>(@"Fonts\RPGSystem");
+            Font = rpgSystem;
+
             player = new Player(Content);
+
             gameRenderTarget = new RenderTarget2D(GraphicsDevice, GAME_X_RESOLUTION, GAME_Y_RESOLUTION, false, SurfaceFormat.Color, DepthFormat.None);
 
             Camera = new Camera();
@@ -99,7 +107,12 @@ namespace NinjaGame
             Camera.Zoom = Camera.DEFAULT_ZOOM;
             Camera.ViewPortWidth = Game1.GAME_X_RESOLUTION;
             Camera.ViewPortHeight = Game1.GAME_Y_RESOLUTION;
-            
+
+
+            tempText = new TempTextObject(Content);
+            tempText.WorldLocation = new Vector2(170, 170);
+            tempObject = new TempObject(Content);
+            tempObject.WorldLocation = new Vector2(210, 100);
 
         }
 
@@ -154,6 +167,9 @@ namespace NinjaGame
                 previousKeyState = keyState;
             }
 
+            tempText.Update(gameTime, elapsed);
+            tempObject.Update(gameTime, elapsed);
+
             base.Update(gameTime);
 
             
@@ -170,13 +186,16 @@ namespace NinjaGame
 
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                   BlendState.AlphaBlend,
-                  SamplerState.LinearClamp,
+                  SamplerState.PointClamp,
                   null,
                   null,
                   null,
                   cameraTransformation);
 
             currentLevel.Draw(spriteBatch, Camera.ScaledViewPort);
+
+            tempText.Draw(spriteBatch);
+            tempObject.Draw(spriteBatch);
 
             // We'll draw everything to gameRenderTarget, including the white render target.
             GraphicsDevice.SetRenderTarget(gameRenderTarget);

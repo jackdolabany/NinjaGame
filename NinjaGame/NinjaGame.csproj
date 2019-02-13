@@ -42,6 +42,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AnimationDisplay.cs" />
+    <Compile Include="AnimationStrip.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DisplayComponent.cs" />
     <Compile Include="DrawLayers.cs" />
@@ -50,11 +52,14 @@
     <Compile Include="GameObject.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="TempTextObject.cs" />
+    <Compile Include="TempObject.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticImageDisplay.cs" />
+    <Compile Include="TextDisplay.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

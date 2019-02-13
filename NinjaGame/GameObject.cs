@@ -250,6 +250,11 @@ namespace NinjaGame
             }
         }
 
+        protected void SetCenteredCollisionRectangle(int width, int height)
+        {
+            this.CollisionRectangle = new Rectangle(-width / 2, -height, width, height);
+        }
+
         public GameObject()
         {
             IsAbleToMoveOutsideOfWorld = true;
@@ -555,7 +560,7 @@ namespace NinjaGame
 
             if (RotationsPerSecond > 0)
             {
-                var rotation = (IsRotationClockwise ? 1 : -1) * elapsed * RotationsPerSecond;
+                var rotation = (IsRotationClockwise ? 1 : -1) * elapsed * RotationsPerSecond * (float)Math.PI * 2;
                 Rotation += rotation;
             }
 
@@ -632,7 +637,7 @@ namespace NinjaGame
                 this.DisplayComponent.Draw(spriteBatch);
             }
 
-            // Draw Collision Rectangle
+            // Draw Collision Rectangle in reddish
             if (DrawCollisionRect || Game1.DrawAllCollisisonRects && !collisionRectangle.IsEmpty)
             {
                 Color color = Color.Red * 0.25f;
@@ -642,9 +647,17 @@ namespace NinjaGame
             // Draw a square at the GameObjects location
             if (DrawLocation || Game1.DrawAllCollisisonRects)
             {
-                var rectSize = 8;
+                var rectSize = 4;
                 var location = WorldLocation;
-                spriteBatch.Draw(Game1.simpleSprites, new Rectangle(-rectSize / 2 + (int)location.X, -rectSize / 2 + (int)location.Y, rectSize / 2, rectSize / 2), Game1.whiteSourceRect, Color.Green);
+
+                // Draw location in green
+                //spriteBatch.Draw(Game1.simpleSprites, new Rectangle(-rectSize / 2 + (int)location.X, -rectSize / 2 + (int)location.Y, rectSize / 2, rectSize / 2), Game1.whiteSourceRect, Color.Green);
+                spriteBatch.Draw(Game1.simpleSprites, new Rectangle(-rectSize / 2 + (int)location.X, -rectSize / 2 + (int)location.Y, rectSize, rectSize), Game1.whiteSourceRect, Color.Green);
+
+                location = WorldCenter;
+
+                // Draw world center in Yellow
+                spriteBatch.Draw(Game1.simpleSprites, new Rectangle(-rectSize / 2 + (int)location.X, -rectSize / 2 + (int)location.Y, rectSize, rectSize), Game1.whiteSourceRect, Color.Yellow);
             }
         }
 

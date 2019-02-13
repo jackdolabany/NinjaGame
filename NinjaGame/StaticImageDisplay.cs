@@ -77,7 +77,9 @@ namespace NinjaGame
         {
             base.Update(gameTime, elapsed, position, flipped);
 
-            DrawObject.Position = position;
+            var center = GetWorldCenter(ref position);
+            var drawPosition = center - new Vector2(DrawObject.SourceRectangle.Width / 2, DrawObject.SourceRectangle.Height / 2) * Scale;
+            DrawObject.Position = RotateAroundOrigin(drawPosition, GetWorldCenter(ref position), Rotation);
 
             SpriteEffects effect = SpriteEffects.None;
             if (flipped)
@@ -90,8 +92,8 @@ namespace NinjaGame
         public override Vector2 GetWorldCenter(ref Vector2 worldLocation)
         {
             return new Vector2(
-              worldLocation.X + ((float)this.DrawObject.SourceRectangle.Width / 2f),
-              worldLocation.Y + ((float)this.DrawObject.SourceRectangle.Height / 2f));
+              worldLocation.X,
+              worldLocation.Y - ((float)this.DrawObject.SourceRectangle.Height / 2f));
         }
     }
 }

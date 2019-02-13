@@ -16,12 +16,24 @@ namespace NinjaGame
 
         KeyboardState previousKeyState;
 
+        AnimationDisplay animations;
+
         public Player(ContentManager content)
         {
-            playerTexture = content.Load<Texture2D>(@"Textures/Tiles");
+            playerTexture = content.Load<Texture2D>(@"Textures/Ninja");
 
-            var cd = new StaticImageDisplay(playerTexture, new Rectangle(0, Game1.TileSize, Game1.TileSize, Game1.TileSize));
-            this.DisplayComponent = cd;
+            //var cd = new StaticImageDisplay(playerTexture, new Rectangle(0, 0, 32, 32));
+
+            animations = new AnimationDisplay();
+            this.DisplayComponent = animations;
+            var idle = new AnimationStrip(
+                    content.Load<Texture2D>(@"Textures\idle"),
+                    32,
+                    "idle");
+            idle.LoopAnimation = true;
+            idle.FrameLength = 0.6f;
+            animations.Add(idle);
+
             Enabled = true;
 
             // TODO: Whatever
@@ -31,14 +43,41 @@ namespace NinjaGame
             this.IsAbleToMoveOutsideOfWorld = true;
             this.IsAbleToSurviveOutsideOfWorld = true;
             this.IsAffectedByForces = false;
-            this.IsAffectedByGravity = false;
-            this.IsAffectedByPlatforms = false;
-            this.CollisionRectangle = new Rectangle(0, 0, 16, 16);
 
+            // Temp
+            this.IsAffectedByGravity = true;
+            //this.RotationsPerSecond = 0.5f;
+
+            this.IsAffectedByPlatforms = false;
+
+            SetCenteredCollisionRectangle(16, 26);
+
+            animations.Play("idle");
         }
+
+        bool isGrowing = true;
 
         public override void Update(GameTime gameTime, float elapsed)
         {
+
+            //if (isGrowing)
+            //{
+            //    this.Scale += elapsed;
+            //    if (this.Scale > 2f)
+            //    {
+            //        isGrowing = false;
+            //    }
+            //}
+            //else
+            //{
+            //    this.Scale -= elapsed;
+            //    if (this.Scale < 0.5f)
+            //    {
+            //        isGrowing = true;
+            //    }
+            //}
+
+
             // Movement
             KeyboardState keyState;
 
@@ -63,9 +102,16 @@ namespace NinjaGame
                 this.velocity.Y = -400;
             }
 
-            base.Update(gameTime, elapsed);
+            if (Velocity.X > 0)
+            {
+                flipped = false;
+            }
+            else if (Velocity.X < 0)
+            {
+                flipped = true;
+            }
 
-            IsAffectedByGravity = true;
+            base.Update(gameTime, elapsed);
 
             previousKeyState = keyState;
         }

@@ -19,11 +19,15 @@ namespace NinjaGame
         public TileMap Map;
         public Camera Camera;
 
+
+       
+
         public Level(Player player, TileMap map, Camera camera)
         {
             Player = player;
             Map = map;
             Camera = camera;
+
         }
 
         public void Update(GameTime gameTime, float elapsed)

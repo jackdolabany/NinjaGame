@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NinjaGame
 {
@@ -46,6 +41,11 @@ namespace NinjaGame
         public virtual void Update(GameTime gameTime, float elapsed, Vector2 position, bool flipped)
         {
             this.Flipped = flipped;
+        }
+
+        protected static Vector2 RotateAroundOrigin(Vector2 point, Vector2 origin, float rotation)
+        {
+            return Vector2.Transform(point - origin, Matrix.CreateRotationZ(rotation)) + origin;
         }
 
     }
