@@ -18,7 +18,7 @@ namespace NinjaGame
         public const int GAME_Y_RESOLUTION = 240;
 
         public static Random Randy = new Random();
-        public static bool DrawAllCollisisonRects = true;
+        public static bool DrawAllCollisisonRects = false;
 
         public static Texture2D simpleSprites;
         public static Rectangle whiteSourceRect = new Rectangle(1, 1, 1, 1).ToTileRect();
