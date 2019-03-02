@@ -40,7 +40,31 @@ namespace NinjaGame
                         var loadClass = mapSquare.LayerTiles[z].LoadClass;
                         if (!string.IsNullOrEmpty(loadClass))
                         {
-                            // TODO: Case off LoadClass to initialize objects.
+                            if (loadClass.StartsWith("Enemy."))
+                            {
+                                //use reflection to load the enemies from the code
+                                string classname = loadClass.Split('.')[1];
+                                Type t = Type.GetType(typeof(Enemy).Namespace + "." + classname);
+                                Enemy enemy = (Enemy)Activator.CreateInstance(t, new object[] { contentManager, x, y, player, camera });
+                                level.Enemies.Add(enemy);
+                                //layerDepthObjects[z].Add(enemy);
+
+                                //foreach (var prop in mapSquare.LayerTiles[z].Properties)
+                                //{
+                                //    switch (prop.Key.ToLower())
+                                //    {
+                                //        case "trigger":
+                                //            var trigger = GetTrigger(prop.Value);
+                                //            enemy.RaiseTriggerOnDeath(trigger);
+                                //            break;
+                                //    }
+                                //}
+
+                            }
+                            else if (loadClass == "Player")
+                            {
+                                player.WorldLocation = new Vector2((x * TileMap.TileSize) + (TileMap.TileSize / 2), (y + 2) * TileMap.TileSize);
+                            }
                         }
                     }
                 }

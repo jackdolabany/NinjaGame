@@ -12,33 +12,28 @@ namespace NinjaGame
 {
     public class Player : GameObject
     {
-        private Texture2D playerTexture;
-
         KeyboardState previousKeyState;
 
         AnimationDisplay animations;
 
         public Player(ContentManager content)
         {
-            playerTexture = content.Load<Texture2D>(@"Textures/Ninja");
-
-            //var cd = new StaticImageDisplay(playerTexture, new Rectangle(0, 0, 32, 32));
-
             animations = new AnimationDisplay();
             this.DisplayComponent = animations;
+
             var idle = new AnimationStrip(
                     content.Load<Texture2D>(@"Textures\idle"),
                     32,
                     "idle");
             idle.LoopAnimation = true;
-            idle.FrameLength = 0.6f;
+            idle.FrameLength = 0.1f;
             animations.Add(idle);
 
             Enabled = true;
 
             // TODO: Whatever
             //cd.DrawDepth = 0.5f;
-            this.WorldLocation = new Vector2(100, 100);
+            //this.WorldLocation = new Vector2(100, 100);
 
             this.IsAbleToMoveOutsideOfWorld = true;
             this.IsAbleToSurviveOutsideOfWorld = true;
@@ -51,6 +46,8 @@ namespace NinjaGame
             this.IsAffectedByPlatforms = false;
 
             SetCenteredCollisionRectangle(16, 26);
+
+            //this.Scale = 3;
 
             animations.Play("idle");
         }

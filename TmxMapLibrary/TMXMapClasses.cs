@@ -766,7 +766,8 @@ namespace Squared.Tiled
                         {
                             tileMap.MapCells[x][y].LevelNumber = int.Parse(tileInfo.properties["LevelNumber"]);
                         }
-                        else
+                        
+                        if(layer.Name.ToLower() != "collisions" && layer.Name.ToLower() != "gameobjects")
                         {
                             //only if the cell doesn't have the previous properties do we consider it something we should draw!
                             var tile = tileMap.MapCells[x][y].LayerTiles[z];

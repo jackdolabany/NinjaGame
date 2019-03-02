@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LevelRectangle.cs" />
-    <Compile Include="LevelTile.cs" />
     <Compile Include="MapEnvironment.cs" />
     <Compile Include="MapLevelMetaData.cs" />
     <Compile Include="MapMetaData.cs" />
@@ -53,7 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileMap.cs" />
-    <Compile Include="WorldMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -47,7 +47,6 @@ namespace TileEngine
         {
             LayerTiles = new Tile[depth];
             Passable = passable;
-            //LoadClasses = new List<string>();
             Door = "";
         }
 

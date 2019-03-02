@@ -21,6 +21,8 @@ namespace NinjaGame
         public static bool DrawAllCollisisonRects = false;
 
         public static Texture2D simpleSprites;
+        public static Texture2D background;
+
         public static Rectangle whiteSourceRect = new Rectangle(1, 1, 1, 1).ToTileRect();
 
         public const int TileSize = TileEngine.TileMap.TileSize;
@@ -86,6 +88,7 @@ namespace NinjaGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             simpleSprites = Content.Load<Texture2D>(@"Textures\SimpleSprites");
+            background = Content.Load<Texture2D>(@"Textures\Background");
 
             var rpgSystem = Content.Load<SpriteFont>(@"Fonts\RPGSystem");
             Font = rpgSystem;
@@ -99,7 +102,6 @@ namespace NinjaGame
             // Load map and adjust Camera
             currentLevel = sceneManager.LoadLevel("TestLevel", Content, player, Camera);
             
-
             Camera.Map = currentLevel.Map;
 
             // Basic Camera Setup
@@ -171,7 +173,6 @@ namespace NinjaGame
             tempObject.Update(gameTime, elapsed);
 
             base.Update(gameTime);
-
             
         }
 
@@ -183,6 +184,18 @@ namespace NinjaGame
         {
             Camera.UpdateTransformation(GraphicsDevice);
             var cameraTransformation = Camera.Transform;
+ 
+            
+            // We'll draw everything to gameRenderTarget, including the white render target.
+            GraphicsDevice.SetRenderTarget(gameRenderTarget);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // Draw the background.
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, null, null);
+            spriteBatch.Draw(background, Vector2.Zero, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            spriteBatch.End();
+
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
             spriteBatch.Begin(SpriteSortMode.BackToFront,
                   BlendState.AlphaBlend,
@@ -197,9 +210,6 @@ namespace NinjaGame
             tempText.Draw(spriteBatch);
             tempObject.Draw(spriteBatch);
 
-            // We'll draw everything to gameRenderTarget, including the white render target.
-            GraphicsDevice.SetRenderTarget(gameRenderTarget);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.End();
 
@@ -208,7 +218,7 @@ namespace NinjaGame
             GraphicsDevice.SetRenderTarget(null);
 
             // XNA draws a bright purple color to the backbuffer by default when we switch to it. Lame! Let's clear it out.
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // Draw the gameRenderTarget with everything in it to the back buffer. We'll reuse spritebatch and just stretch it to fit.
             spriteBatch.Begin(samplerState: SamplerState.PointClamp);
