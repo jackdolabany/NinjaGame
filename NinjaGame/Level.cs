@@ -36,6 +36,31 @@ namespace NinjaGame
             {
                 enemy.Update(gameTime, elapsed);
             }
+
+            // Check collisions
+            if (Player.Enabled)
+            {
+                foreach (var enemy in Enemies)
+                {
+                    if (enemy.Alive && Player.CollisionRectangle.Intersects(enemy.CollisionRectangle))
+                    {
+
+                        if (Math.Abs(Player.CollisionRectangle.Bottom - enemy.CollisionRectangle.Top) <= 6 && Player.CollisionRectangle.Right > enemy.CollisionRectangle.Left && Player.CollisionRectangle.Left < enemy.CollisionRectangle.Right)
+                        {
+                            // kill the enemy
+                            enemy.Kill();
+                        }
+                        else
+                        {
+                            // kill the player
+                            Player.Enabled = false;
+                            EffectsManager.AddBigBloodEffect(Player.WorldCenter);
+                            EffectsManager.RisingText("Dead", Player.WorldCenter);
+                            EffectsManager.EnemyPop(Player.WorldCenter, 10, Color.Red, 50f);
+                        }
+                    }
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle scaledViewPort)

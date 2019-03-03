@@ -18,6 +18,7 @@ namespace NinjaGame
         public const int GAME_Y_RESOLUTION = 240;
 
         public static Random Randy = new Random();
+        public const float MIN_DRAW_INCREMENT = 0.0000005f;
         public static bool DrawAllCollisisonRects = false;
 
         public static Texture2D simpleSprites;
@@ -110,11 +111,13 @@ namespace NinjaGame
             Camera.ViewPortWidth = Game1.GAME_X_RESOLUTION;
             Camera.ViewPortHeight = Game1.GAME_Y_RESOLUTION;
 
-
+            // Testing rotating text
             tempText = new TempTextObject(Content);
             tempText.WorldLocation = new Vector2(170, 170);
             tempObject = new TempObject(Content);
             tempObject.WorldLocation = new Vector2(210, 100);
+
+            EffectsManager.Initialize(Content);
 
         }
 
@@ -144,7 +147,7 @@ namespace NinjaGame
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             currentLevel.Update(gameTime, elapsed);
-
+            EffectsManager.Update(gameTime, elapsed);
             
             if (Game1.IS_DEBUG)
             {
@@ -206,6 +209,8 @@ namespace NinjaGame
                   cameraTransformation);
 
             currentLevel.Draw(spriteBatch, Camera.ScaledViewPort);
+
+            EffectsManager.Draw(spriteBatch);
 
             tempText.Draw(spriteBatch);
             tempObject.Draw(spriteBatch);

@@ -18,7 +18,6 @@ namespace NinjaGame
         private string name;
         private string nextAnimation;
 
-        #region Properties
         public int FrameWidth
         {
             get { return frameWidth; }
@@ -98,9 +97,7 @@ namespace NinjaGame
                     frameHeight);
             }
         }
-        #endregion
 
-        #region Constructor
         public AnimationStrip(Texture2D texture, int frameWidth, string name)
         {
             this.texture = texture;
@@ -108,9 +105,7 @@ namespace NinjaGame
             this.frameHeight = texture.Height;
             this.name = name;
         }
-        #endregion
 
-        #region Public Methods
         public void Play(int currentFrame)
         {
             this.currentFrame = currentFrame;
@@ -150,7 +145,6 @@ namespace NinjaGame
                 frameTimer = 0f;
             }
         }
-        #endregion
 
         public object Clone()
         {

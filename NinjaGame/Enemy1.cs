@@ -36,8 +36,9 @@ namespace NinjaGame
 
         public override void Kill()
         {
-            //cd.PlayAnimation("Death");
-            //EffectsManager.AddBloodEffect(new Vector2(CollisionRectangle.X + (collisionRectangle.Width / 2), CollisionRectangle.Top + 5), OnGround);
+            EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Yellow, 100f);
+            EffectsManager.EnemyPop(this.WorldCenter, 10, Color.White, 50f);
+            this.Enabled = false;
             base.Kill();
         }
 
@@ -53,6 +54,7 @@ namespace NinjaGame
 
         public override void Update(GameTime gameTime, float elapsed)
         {
+
             var prevOnGround = OnGround;
 
             if (Alive)
