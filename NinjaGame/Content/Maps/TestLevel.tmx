@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="100" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="1">
  <tileset firstgid="1" source="Collisions.tsx"/>
  <tileset firstgid="13" source="GameObjects.tsx"/>
  <tileset firstgid="29" source="TempTiles.tsx"/>
+ <tileset firstgid="45" source="../../../../res/RobotExplorationSquad/Content/Maps/Platform_Tileset_2.tsx"/>
  <layer id="7" name="Tiles" width="100" height="30">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAACu3aQQqAIBQAUU/SxvvfMdpFWVn4dYwZ+KtaVA+NoCWltDioMUZ6sNKDlR6s9GClBys9WOnBSg9WerDSg5UerPRgpUff8sNxPfp3Z6LHmK5M9BhXyUQPVnrElXdTc96WHqz06N/dutEjtpo9y/2K2+weOdW/N0n9Zb86Pv/S0Jv1+7zm2c9g8+Z6vnpE3nMLhyibaOe3HlH3GmXQ8lp7rL3R/w0751kBVDJsb+AuAAA=
   </data>
  </layer>
- <layer id="6" name="GameObjects" width="100" height="30" visible="0">
+ <layer id="6" name="GameObjects" width="100" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3PQREAMAjAMAxs/uXigN8GdyQK2ggAAAAAAAAAAAAANjrdATxzuwMKP9om/1NLLDzSFOAuAAA=
+   H4sIAAAAAAAACu3XS44BUQBGYbWArk3QGtvwtg20xwKwPDaBISswa4ZOpNORToTEVVVS54sTA1Ju6p+oQkGSJEmSJEmSJEmhLWmV9iH0Z0f7tA+RQ2va0Pb/BxGvKPnz5N0PHemU9kF04R7P+Qh8PffIFvfIFvdIzuGqW9wjOe4RTpH//iX6pDJ9UYWqVHvwucA9wqlzzxvUpBa1qUNd6rlH4vrc8wEN6ZtGNKYJTQPsEf++z7jWnBYZehaP73/lLX5Dr3EGT+6ydeAuAAA=
   </data>
  </layer>
- <layer id="5" name="Collisions" width="100" height="30" visible="0" opacity="0.62">
+ <layer id="8" name="TopLayer" width="100" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu3XTU7CQBiHcXoWWJEIh8Av3LCTA4iCLl20HAg/jqEJICdQl3ICduDSJ6aaZtKWLt7Ysf3/wpMmQCaTvg1hGg0RERERERERERERERGx9kTPZW9Cfn3QuuxN1NArvdG7+0HAK/j7/dTdlnb0WfZG5Jvm4RfNwy+ah52DREmDuCKs5zGjO7qnB3o0WtcXtynt8zOPTaIs1vOY04KW9EIro3V9kTWPjvO9cxo671nPo+rPfp4m//1bQfo82olzQTe+hhQ5a1jPo+rPfp4e9/yQjuiYTuiU+nRW8JxWxu9VVV1wz0d0SVc0pgld043hPELWimiqs7j8E1/QHOGz4C4AAA==
+  </data>
+ </layer>
+ <layer id="5" name="Collisions" width="100" height="30" opacity="0.62">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAACu3aMQ0AQAzDwKr8QT+AAngPd1IQeM3OzFpqNOjRokeLHi16tOjRokeLHi16tOjRokeLHi16tOjRokeLHi16tOjRokeLHi16tOjRokeLHi16tOjRokeLHi2/f8N29wDa02bl4C4AAA==
   </data>

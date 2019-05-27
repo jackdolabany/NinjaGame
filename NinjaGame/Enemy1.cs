@@ -61,7 +61,7 @@ namespace NinjaGame
             {
                 if (animations.currentAnimationName == "idle")
                 {
-                    this.velocity.X = 100;
+                    this.velocity.X = 10;
                     if (flipped)
                     {
                         this.velocity.X *= -1;
