@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content.Pipeline;
 using TileEngine;
 
-namespace RoboHunterContentPipelineExtension
+namespace CustomContentProcessorLibrary
 {
     [ContentImporter(".tmx", DefaultProcessor = "PassThroughProcessor", DisplayName = "TMX Map Importer")]
     public class TMXMapImporter : ContentImporter<TileMap>

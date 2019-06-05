@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 using System.IO;
 using TileEngine;
 
-namespace RoboHunterContentPipelineExtension
+namespace CustomContentProcessorLibrary
 {
     [ContentImporter(".mmd", DefaultProcessor = "PassThroughProcessor", DisplayName = "Map Meta Data Importer")]
     public class MapMetaDataImporter : ContentImporter<MapMetaData>

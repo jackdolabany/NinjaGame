@@ -45,6 +45,18 @@
 /processorParam:TextureFormat=Color
 /build:Maps/GameObjects.png
 
+#begin Maps/Platform Tileset 4.png
+/importer:TextureImporter
+/processor:TileImageProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Platform Tileset 4.png
+
 #begin Maps/Platform_Tileset_2.png
 /importer:TextureImporter
 /processor:TileImageProcessor

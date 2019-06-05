@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
 
-namespace RoboHunterContentPipelineExtension
+namespace CustomContentProcessorLibrary
 {
     /// <summary>
     /// This process puts a border around tile images because when they scale they tend to grab the pixel outside
