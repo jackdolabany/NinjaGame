@@ -101,7 +101,7 @@ namespace NinjaGame
             Camera = new Camera();
 
             // Load map and adjust Camera
-            currentLevel = sceneManager.LoadLevel("TestLevel", Content, player, Camera);
+            currentLevel = sceneManager.LoadLevel("TestLevel2", Content, player, Camera);
             
             Camera.Map = currentLevel.Map;
 

@@ -52,7 +52,7 @@ namespace TileEngine
         {
             get 
             { 
-                return Texture.Width / TileWidth;
+                return Texture.Width / (TileWidth + 2);
             }
         }
     }

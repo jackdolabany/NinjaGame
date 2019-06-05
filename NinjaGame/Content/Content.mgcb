@@ -14,6 +14,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Fonts/RPGSystem.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/RPGSystem.spritefont
+
 #begin Maps/Collisions.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -26,12 +33,7 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Collisions.png
 
-#begin Maps/TestLevel.tmx
-/importer:TMXMapImporter
-/processor:PassThroughProcessor
-/build:Maps/TestLevel.tmx
-
-#begin Textures/idle.png
+#begin Maps/GameObjects.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -41,7 +43,29 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/idle.png
+/build:Maps/GameObjects.png
+
+#begin Maps/Platform_Tileset_2.png
+/importer:TextureImporter
+/processor:TileImageProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Maps/Platform_Tileset_2.png
+
+#begin Maps/TestLevel.tmx
+/importer:TMXMapImporter
+/processor:PassThroughProcessor
+/build:Maps/TestLevel.tmx
+
+#begin Maps/TestLevel2.tmx
+/importer:TMXMapImporter
+/processor:PassThroughProcessor
+/build:Maps/TestLevel2.tmx
 
 #begin Maps/Tiles.png
 /importer:TextureImporter
@@ -54,25 +78,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Maps/Tiles.png
-
-#begin Textures/SimpleSprites.png
-/importer:TextureImporter
-/processor:TileImageProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/SimpleSprites.png
-
-#begin Fonts/RPGSystem.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/RPGSystem.spritefont
 
 #begin Textures/background.png
 /importer:TextureImporter
@@ -97,4 +102,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/EnemyIdle.png
+
+#begin Textures/idle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/idle.png
+
+#begin Textures/SimpleSprites.png
+/importer:TextureImporter
+/processor:TileImageProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/SimpleSprites.png
 
