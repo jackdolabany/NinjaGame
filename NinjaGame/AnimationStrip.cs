@@ -5,79 +5,34 @@ namespace NinjaGame
 {
     public class AnimationStrip
     {
-        private Texture2D texture;
-        private int frameWidth;
-        private int frameHeight;
-
         private float frameTimer = 0f;
-        private float frameDelay = 0.05f;
+
         public int currentFrame;
-        private bool loopAnimation = true;
-        private bool finishedPlaying = false;
+        
+        public int FrameWidth { get; set; }
 
-        private string name;
-        private string nextAnimation;
+        public int FrameHeight { get; set; }
 
-        public int FrameWidth
-        {
-            get { return frameWidth; }
-            set { frameWidth = value; }
-        }
+        public Texture2D Texture { get; set; }
 
-        public int FrameHeight
-        {
-            get { return frameHeight; }
-            set { frameHeight = value; }
-        }
+        public string Name { get; set; }
 
-        public Texture2D Texture
-        {
-            get { return texture; }
-            set { texture = value; }
-        }
+        public string NextAnimation { get; set; }
 
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
-
-        public string NextAnimation
-        {
-            get { return nextAnimation; }
-            set { nextAnimation = value; }
-        }
-
-        public bool LoopAnimation
-        {
-            get { return loopAnimation; }
-            set { loopAnimation = value; }
-        }
+        public bool LoopAnimation { get; set; }
 
         public bool Oscillate { get; set; }
 
-        public bool FinishedPlaying
-        {
-            get { return finishedPlaying; }
-        }
+        public bool FinishedPlaying { get; private set; }
 
         public int FrameCount
         {
-            get { return texture.Width / frameWidth; }
+            get { return Texture.Width / FrameWidth; }
         }
 
-        public float FrameLength
-        {
-            get { return frameDelay; }
-            set { frameDelay = value; }
-        }
+        public float FrameLength { get; set; }
 
-        private bool _reverse = false;
-        public bool Reverse
-        {
-            get { return _reverse; }
-            set { _reverse = value; }
-        }
+        public bool Reverse { get; set; }
 
         public Rectangle FrameRectangle
         {
@@ -85,60 +40,68 @@ namespace NinjaGame
             {
 
                 int realCurrentFrame = currentFrame;
-                if (_reverse)
+                if (Reverse)
                 {
                     realCurrentFrame = FrameCount - 1 - currentFrame;
                 }
 
                 return new Rectangle(
-                    realCurrentFrame * frameWidth,
+                    realCurrentFrame * FrameWidth,
                     0,
-                    frameWidth,
-                    frameHeight);
+                    FrameWidth,
+                    FrameHeight);
             }
         }
 
         public AnimationStrip(Texture2D texture, int frameWidth, string name)
         {
-            this.texture = texture;
-            this.frameWidth = frameWidth;
-            this.frameHeight = texture.Height;
-            this.name = name;
+            this.Texture = texture;
+            this.FrameWidth = frameWidth;
+            this.FrameHeight = texture.Height;
+            this.Name = name;
+            this.FrameLength = 0.05f;
         }
 
-        public void Play(int currentFrame)
+        public AnimationStrip Play(int currentFrame)
         {
             this.currentFrame = currentFrame;
             this.frameTimer = 0;
-            finishedPlaying = false;
+            FinishedPlaying = false;
+            return this;
         }
 
-        public void Play()
+        public AnimationStrip Play()
         {
-            Play(0);
+            return Play(0);
+        }
+
+        public AnimationStrip FollowedBy(string animationName)
+        {
+            this.NextAnimation = animationName;
+            return this;
         }
 
         public void Update(float elapsed)
         {
             frameTimer += elapsed;
 
-            if (frameTimer >= frameDelay)
+            if (frameTimer >= FrameLength)
             {
                 currentFrame++;
                 if (currentFrame >= FrameCount)
                 {
-                    if (loopAnimation)
+                    if (LoopAnimation)
                     {
                         currentFrame = 0;
                         if (Oscillate)
                         {
-                            _reverse = !_reverse;
+                            Reverse = !Reverse;
                         }
                     }
                     else
                     {
                         currentFrame = FrameCount - 1;
-                        finishedPlaying = true;
+                        FinishedPlaying = true;
                     }
                 }
 
@@ -148,7 +111,7 @@ namespace NinjaGame
 
         public object Clone()
         {
-            AnimationStrip clone = new AnimationStrip(this.Texture, this.frameWidth, this.Name);
+            AnimationStrip clone = new AnimationStrip(this.Texture, this.FrameWidth, this.Name);
             clone.currentFrame = this.currentFrame;
             clone.FrameHeight = this.FrameHeight;
             clone.FrameLength = this.FrameLength;

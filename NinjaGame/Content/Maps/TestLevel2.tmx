@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="50" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="1">
  <tileset firstgid="1" source="Tileset1.tsx"/>
  <tileset firstgid="577" source="Collisions.tsx"/>
  <tileset firstgid="589" source="GameObjects.tsx"/>
@@ -20,7 +20,7 @@
  </layer>
  <layer id="1" name="Tile Layer 1" width="50" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu2UO07DQBCGvYaCVxcSAiWpeNwCFBTgHCABp6DIQehA4hJARejy4FHTQQcESMVnxSuPwq4d0gRH80ufMvHM7M6/3iQIVCqVSqVSqVQqlWrydAsNuBv3ICNo1iTxOfELn69jm2Z0rQ34uICG8df/V9XEzOvEG7CZQx/yfcwRz8NCDn3UHD7yfq8iH3sT4OMy417l5X95N34f+x4fWfkshfRNpVCIWYQilERu+g97HlF7DCeefWS+SX0L2tAJ3PVWNr6CagqnDmzuZoj5zzLWH2bPtJpqvM+qcc8aURf48k36W9CGDtzDAzzCk+mfk6vv16zU7qTM4uLZcW4V02fGJLFd23qpiNx1/OyN+B0+oAuf8AXf0It9yD4fB3DoeF4XHuV82yl3essk+NaWPqN7VQj57UARSrAEZViGldDf6zobiZzFzmG/D3r4AXSklYpwFwAA
+   H4sIAAAAAAAACu2UuU7DQBCGvYaCqwsJR0kqjrcABQV4DpCAp0AoD0IHEi8BVIQuB0dNBx2Eq+Kz4pVHZteO0gRH80ufPPbM7s6/XjsIVCqVSqVSqVQqlWr8dAtNuBt1I0No2iTxOfEL19eRdTO8VlM+LqBp/PX/VXXR8xrxOmwU0Id8HzPEszBXQB91h4+in6vIx+4Y+LjMOVdF+S/vxO9jz+MjL5+nkHETGZRi5qEMFZGbTK15GuPSIbVHcOxZR+Zb1LehA93AXW9l4yuoZXDiwOZuBtins5z5B1kzq6YWr7Ni3L1GNAS+fIvxbehAF+7hAR7hyfT3yTXuT6/Ubmf04uLZsW9V02fKJLGd23qpitx1/OyN+B168AGf8AXf8BP7kON87MOB43lDeJT9bWV8R5smwTe39Bmdq1LItwNlqMACLMISLIf+sa69kchebB/2Pu3hF6+hraxwFwAA
   </data>
  </layer>
  <layer id="3" name="props" width="50" height="30">
@@ -30,7 +30,12 @@
  </layer>
  <layer id="5" name="player" width="50" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3OsQkAIRAAQTEQKxGbsf92voQXRQ5xJt5gUwIAAADgJSNHH6yr0QM/ymTXj17sa9EDcKkPpISsanAXAAA=
+   H4sIAAAAAAAACu3TwQmAMAwF0NJDcRJxmTqWc7uAkB4iEXzvmpAfCGkNAAAA3nNVLwAfVvUfsxcFJ9iqFwiMxb4jqJ+JN4pmPdX3vHj4lRuJoHQJcBcAAA==
+  </data>
+ </layer>
+ <layer id="8" name="collisions" width="50" height="30" opacity="0.13">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACu3JMQ0AAAgDsAVr+PeECI497dsEAAAAAGjb+T3Qd4T1XjlwFwAA
   </data>
  </layer>
 </map>

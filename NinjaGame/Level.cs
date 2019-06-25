@@ -42,21 +42,33 @@ namespace NinjaGame
             {
                 foreach (var enemy in Enemies)
                 {
-                    if (enemy.Alive && Player.CollisionRectangle.Intersects(enemy.CollisionRectangle))
+                    if (enemy.Alive)
                     {
-
-                        if (Math.Abs(Player.CollisionRectangle.Bottom - enemy.CollisionRectangle.Top) <= 6 && Player.CollisionRectangle.Right > enemy.CollisionRectangle.Left && Player.CollisionRectangle.Left < enemy.CollisionRectangle.Right)
+                        if (Player.AttackRectangle.Intersects(enemy.CollisionRectangle))
                         {
-                            // kill the enemy
+                            // Player punched out the enemy!
                             enemy.Kill();
                         }
                         else
                         {
-                            // kill the player
-                            Player.Enabled = false;
-                            EffectsManager.AddBigBloodEffect(Player.WorldCenter);
-                            EffectsManager.RisingText("Dead", Player.WorldCenter);
-                            EffectsManager.EnemyPop(Player.WorldCenter, 10, Color.Red, 50f);
+                            // Check body collisions
+                            if (Player.CollisionRectangle.Intersects(enemy.CollisionRectangle))
+                            {
+
+                                if (Math.Abs(Player.CollisionRectangle.Bottom - enemy.CollisionRectangle.Top) <= 6 && Player.CollisionRectangle.Right > enemy.CollisionRectangle.Left && Player.CollisionRectangle.Left < enemy.CollisionRectangle.Right)
+                                {
+                                    // Player jumped on top of the enemy
+                                    enemy.Kill();
+                                }
+                                else
+                                {
+                                    // Enemy collided with the player. Kill the player
+                                    Player.Enabled = false;
+                                    EffectsManager.AddBigBloodEffect(Player.WorldCenter);
+                                    EffectsManager.RisingText("Dead", Player.WorldCenter);
+                                    EffectsManager.EnemyPop(Player.WorldCenter, 10, Color.Red, 50f);
+                                }
+                            }
                         }
                     }
                 }

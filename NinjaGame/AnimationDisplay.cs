@@ -92,18 +92,20 @@ namespace NinjaGame
               worldLocation.Y - ((float)currentAnimation.FrameHeight / 2f));
         }
 
-        public void Play(string name, int startFrame)
+        public AnimationStrip Play(string name, int startFrame)
         {
-            if (!(name == null) && animations.ContainsKey(name))
+            if (name != null && animations.ContainsKey(name))
             {
                 currentAnimationName = name;
                 animations[name].Play(startFrame);
+                return animations[name];
             }
+            return null;
         }
 
-        public virtual void Play(string name)
+        public AnimationStrip Play(string name)
         {
-            Play(name, 0);
+            return Play(name, 0);
         }
     }
 }

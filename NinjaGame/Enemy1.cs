@@ -36,8 +36,12 @@ namespace NinjaGame
 
         public override void Kill()
         {
-            EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Yellow, 100f);
-            EffectsManager.EnemyPop(this.WorldCenter, 10, Color.White, 50f);
+            //EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Yellow, 100f);
+            //EffectsManager.EnemyPop(this.WorldCenter, 10, Color.White, 50f);
+
+            EffectsManager.AddBigBloodEffect(this.WorldCenter);
+            EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Red, 50f);
+
             this.Enabled = false;
             base.Kill();
         }
