@@ -17,7 +17,9 @@ namespace NinjaGame
         AnimationDisplay animations;
 
         private Rectangle attackRectangle;
-        private List<Enemy> punchedEnemies = new List<Enemy>(5);
+
+        // Keeps track of the enemies already stabbed for a given knife swing.
+        private List<Enemy> stabbedEnemies = new List<Enemy>(5);
 
         private AnimationStrip attackAnimation;
 
@@ -125,9 +127,9 @@ namespace NinjaGame
         {
             if(enemy.Alive)
             {
-                if (attackRectangle.Intersects(enemy.CollisionRectangle) && !punchedEnemies.Contains(enemy))
+                if (attackRectangle.Intersects(enemy.CollisionRectangle) && !stabbedEnemies.Contains(enemy))
                 {
-                    punchedEnemies.Add(enemy);
+                    stabbedEnemies.Add(enemy);
                     var force = enemy.WorldCenter - this.WorldCenter;
                     force.Normalize();
                     enemy.TakeHit(1, force * 100f);
@@ -198,7 +200,7 @@ namespace NinjaGame
             if (keyState.IsKeyDown(Keys.LeftShift) && !previousKeyState.IsKeyDown(Keys.LeftShift))
             {
                 nextAnimation = "attack";
-                SoundManager.PlaySound("woosh1");
+                
             }
 
             if (animations.currentAnimationName != nextAnimation)
@@ -209,7 +211,8 @@ namespace NinjaGame
                     animations.Play(nextAnimation);
                     if (nextAnimation == "attack")
                     {
-                        punchedEnemies.Clear();
+                        SoundManager.PlaySound("woosh1");
+                        stabbedEnemies.Clear();
                     }
                 }
                 
