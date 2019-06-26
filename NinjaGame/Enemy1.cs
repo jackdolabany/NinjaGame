@@ -36,9 +36,6 @@ namespace NinjaGame
 
         public override void Kill()
         {
-            //EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Yellow, 100f);
-            //EffectsManager.EnemyPop(this.WorldCenter, 10, Color.White, 50f);
-
             EffectsManager.AddBigBloodEffect(this.WorldCenter);
             EffectsManager.EnemyPop(this.WorldCenter, 10, Color.Red, 50f);
 
@@ -48,12 +45,12 @@ namespace NinjaGame
 
         public override void PlayDeathSound()
         {
-            //SoundManager.PlayBlobHit();
+            SoundManager.PlaySound("bookClose");
         }
 
         public override void PlayTakeHitSound()
         {
-            //SoundManager.PlayBlobHit();
+            SoundManager.PlaySound("swordMetal7");
         }
 
         public override void Update(GameTime gameTime, float elapsed)

@@ -142,7 +142,7 @@ namespace NinjaGame
 
         }
 
-        public virtual void TakeHit(float damage, Vector2 force, bool isExplosion, bool isSword)
+        public virtual void TakeHit(int damage, Vector2 force)
         {
             if (Invincible)
             {

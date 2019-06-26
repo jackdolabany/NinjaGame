@@ -16,8 +16,8 @@ namespace NinjaGame
 
         AnimationDisplay animations;
 
-        public Rectangle AttackRectangle;
-        //public bool attackRectangleEnabled;
+        private Rectangle attackRectangle;
+        private List<Enemy> punchedEnemies = new List<Enemy>(5);
 
         private AnimationStrip attackAnimation;
 
@@ -96,7 +96,7 @@ namespace NinjaGame
             //        isGrowing = true;
             //    }
             //}
-            
+
             HandleInputs();
 
             if (Velocity.X > 0)
@@ -107,18 +107,47 @@ namespace NinjaGame
             {
                 flipped = true;
             }
-       
+
             base.Update(gameTime, elapsed);
 
-            AttackRectangle = Rectangle.Empty;
+            attackRectangle = Rectangle.Empty;
             if (animations.currentAnimationName == "attack" && attackAnimation.currentFrame >= 2)
             {
-                AttackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 10, 15);
+                attackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 10, 15);
                 if (flipped)
                 {
-                    AttackRectangle.X -= (this.collisionRectangle.Width + AttackRectangle.Width);
+                    attackRectangle.X -= (this.collisionRectangle.Width + attackRectangle.Width);
                 }
             }
+        }
+
+        public void CheckEnemyInteractions(Enemy enemy)
+        {
+            if(enemy.Alive)
+            {
+                if (attackRectangle.Intersects(enemy.CollisionRectangle) && !punchedEnemies.Contains(enemy))
+                {
+                    punchedEnemies.Add(enemy);
+                    var force = enemy.WorldCenter - this.WorldCenter;
+                    force.Normalize();
+                    enemy.TakeHit(1, force * 100f);
+                }
+                else
+                {
+                    // Check body collisions
+                    if (CollisionRectangle.Intersects(enemy.CollisionRectangle))
+                    {
+                        // Enemy collided with the player. Kill the player
+                        Enabled = false;
+                        EffectsManager.AddBigBloodEffect(WorldCenter);
+                        EffectsManager.RisingText("Dead", WorldCenter);
+                        EffectsManager.EnemyPop(WorldCenter, 10, Color.Red, 50f);
+                        SoundManager.PlaySound("bookClose");
+                    }
+                }
+
+            }
+            
         }
 
         private void HandleInputs()
@@ -157,25 +186,31 @@ namespace NinjaGame
                 }
             }
             
+            // Jump.
             if (OnGround && keyState.IsKeyDown(Keys.Space) && !previousKeyState.IsKeyDown(Keys.Space))
             {
-                // Jump
                 this.velocity.Y = -400;
-                animations.Play("jump");
-                return;
+                nextAnimation = "jump";
+                SoundManager.PlaySound("cloth1");
             }
 
+            // Attack.
             if (keyState.IsKeyDown(Keys.LeftShift) && !previousKeyState.IsKeyDown(Keys.LeftShift))
             {
-                animations.Play("attack").FollowedBy("idle");
-                return;
+                nextAnimation = "attack";
+                SoundManager.PlaySound("woosh1");
             }
 
             if (animations.currentAnimationName != nextAnimation)
             {
-                if (animations.currentAnimationName != "attack") // Don't break the attack
+                var isAttackPlaying = animations.currentAnimationName == "attack" && !animations.animations["attack"].FinishedPlaying;
+                if (!isAttackPlaying) // Don't break the attack
                 {
                     animations.Play(nextAnimation);
+                    if (nextAnimation == "attack")
+                    {
+                        punchedEnemies.Clear();
+                    }
                 }
                 
             }
@@ -188,10 +223,10 @@ namespace NinjaGame
         {
 
             // Draw Collision Rectangle in reddish
-            if (DrawCollisionRect || Game1.DrawAllCollisisonRects && !AttackRectangle.IsEmpty)
+            if (DrawCollisionRect || Game1.DrawAllCollisisonRects && !attackRectangle.IsEmpty)
             {
                 Color color = Color.Aquamarine * 0.25f;
-                spriteBatch.Draw(Game1.simpleSprites, AttackRectangle, Game1.whiteSourceRect, color);
+                spriteBatch.Draw(Game1.simpleSprites, attackRectangle, Game1.whiteSourceRect, color);
             }
 
             base.Draw(spriteBatch);

@@ -91,6 +91,36 @@
 /processorParam:TextureFormat=Color
 /build:Maps/Tiles.png
 
+#begin Sounds/bookClose.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/bookClose.ogg
+
+#begin Sounds/cloth1.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/cloth1.ogg
+
+#begin Sounds/Music/Retro Mystic.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sounds/Music/Retro Mystic.ogg
+
+#begin Sounds/swordMetal7.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/swordMetal7.ogg
+
+#begin Sounds/woosh1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/woosh1.wav
+
 #begin Textures/background.png
 /importer:TextureImporter
 /processor:TextureProcessor

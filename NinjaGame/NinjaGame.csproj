@@ -61,6 +61,7 @@
     <Compile Include="GameObjectCircularBuffer.cs" />
     <Compile Include="GameObjectPool.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="SoundManager.cs" />
     <Compile Include="TempTextObject.cs" />
     <Compile Include="TempObject.cs" />
     <Compile Include="SceneManager.cs" />

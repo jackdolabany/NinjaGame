@@ -118,7 +118,8 @@ namespace NinjaGame
             tempObject.WorldLocation = new Vector2(210, 100);
 
             EffectsManager.Initialize(Content);
-
+            SoundManager.Initialize(Content);
+            SoundManager.PlaySong("Retro Mystic", true);
         }
 
         /// <summary>
