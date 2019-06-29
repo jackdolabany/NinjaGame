@@ -54,6 +54,16 @@
     <Compile Include="Enemy1.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="InputManager.cs" />
+    <Compile Include="Menus\AlertBoxMenu.cs" />
+    <Compile Include="Menus\DeadMenu.cs" />
+    <Compile Include="Menus\MainMenu.cs" />
+    <Compile Include="Menus\Menu.cs" />
+    <Compile Include="Menus\MenuEventArg.cs" />
+    <Compile Include="Menus\MenuManager.cs" />
+    <Compile Include="Menus\MenuOption.cs" />
+    <Compile Include="Menus\PauseMenu.cs" />
+    <Compile Include="Menus\YesNoMenu.cs" />
     <Compile Include="ObjectPool.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Level.cs" />

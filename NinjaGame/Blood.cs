@@ -87,7 +87,7 @@ namespace NinjaGame
 
         public void LoadCurrentMapSquare()
         {
-            currentMapSquare = Game1.CurrentMap.GetMapSquareAtPixel(this.worldLocation);
+            currentMapSquare = Game1.CurrentMap?.GetMapSquareAtPixel(this.worldLocation);
             this.Enabled = currentMapSquare != null;
         }
 

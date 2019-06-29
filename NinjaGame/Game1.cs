@@ -19,10 +19,11 @@ namespace NinjaGame
 
         public static Random Randy = new Random();
         public const float MIN_DRAW_INCREMENT = 0.0000005f;
+
         public static bool DrawAllCollisisonRects = false;
 
         public static Texture2D simpleSprites;
-        public static Texture2D background;
+        public static Texture2D titleScreen;
 
         public static Rectangle whiteSourceRect = new Rectangle(1, 1, 1, 1).ToTileRect();
 
@@ -30,7 +31,7 @@ namespace NinjaGame
 
         private static RenderTarget2D gameRenderTarget;
 
-        private static Player player;
+        public static Player Player;
 
         private static SceneManager sceneManager;
 
@@ -40,7 +41,7 @@ namespace NinjaGame
         {
             get
             {
-                return currentLevel.Map;
+                return currentLevel?.Map;
             }
         }
 
@@ -51,8 +52,28 @@ namespace NinjaGame
 
         public static SpriteFont Font;
 
-        private TempTextObject tempText;
-        private TempObject tempObject;
+        private PauseMenu pauseMenu;
+        private MainMenu mainMenu;
+
+        private GameState _gameState;
+
+        private GameState CurrentGameState
+        {
+            get { return _gameState; }
+            set
+            {
+                _gameState = value;
+                transitionToState = value;
+            }
+        }
+
+        // State to go to on the next update cycle
+        private GameState transitionToState;
+        private float transitionTimer;
+        const float totalTransitionTime = 0.5f;
+        private bool IsFading;
+
+        InputManager inputManager;
 
         public Game1()
         {
@@ -60,9 +81,9 @@ namespace NinjaGame
 
             graphics.PreferredBackBufferWidth = GAME_X_RESOLUTION * 3;
             graphics.PreferredBackBufferHeight = GAME_Y_RESOLUTION * 3;
+
             Window.AllowUserResizing = true;
             Window.Title = "Ninja Game";
-            //Window.
 
             Content.RootDirectory = "Content";
         }
@@ -89,37 +110,96 @@ namespace NinjaGame
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             simpleSprites = Content.Load<Texture2D>(@"Textures\SimpleSprites");
-            background = Content.Load<Texture2D>(@"Textures\Background");
+            titleScreen = Content.Load<Texture2D>(@"Textures\TitleScreen");
 
-            var rpgSystem = Content.Load<SpriteFont>(@"Fonts\RPGSystem");
+            var rpgSystem = Content.Load<SpriteFont>(@"Fonts\KenPixel");
             Font = rpgSystem;
 
-            player = new Player(Content);
+            inputManager = new InputManager();
+            var deadMenu = new DeadMenu(this);
+
+            Player = new Player(Content, inputManager, deadMenu);
 
             gameRenderTarget = new RenderTarget2D(GraphicsDevice, GAME_X_RESOLUTION, GAME_Y_RESOLUTION, false, SurfaceFormat.Color, DepthFormat.None);
 
             Camera = new Camera();
 
             // Load map and adjust Camera
-            currentLevel = sceneManager.LoadLevel("TestLevel2", Content, player, Camera);
+            //currentLevel = sceneManager.LoadLevel("TestLevel2", Content, Player, Camera);
             
-            Camera.Map = currentLevel.Map;
+            //Camera.Map = currentLevel.Map;
 
             // Basic Camera Setup
-            Camera.Position = Vector2.Zero;
+            //Camera.Position = Vector2.Zero;
             Camera.Zoom = Camera.DEFAULT_ZOOM;
             Camera.ViewPortWidth = Game1.GAME_X_RESOLUTION;
             Camera.ViewPortHeight = Game1.GAME_Y_RESOLUTION;
 
-            // Testing rotating text
-            tempText = new TempTextObject(Content);
-            tempText.WorldLocation = new Vector2(170, 170);
-            tempObject = new TempObject(Content);
-            tempObject.WorldLocation = new Vector2(210, 100);
-
             EffectsManager.Initialize(Content);
             SoundManager.Initialize(Content);
             SoundManager.PlaySong("Retro Mystic", true);
+
+            pauseMenu = new PauseMenu(this);
+            mainMenu = new MainMenu(this);
+
+            CurrentGameState = GameState.Playing;
+
+            StartNewGame();
+        }
+
+        public void StartNewGame()
+        {
+            MenuManager.ClearMenus();
+
+            TransitionToState(GameState.Playing);
+
+            // Clean up the blood.
+            EffectsManager.Initialize(Content);
+
+            Player.Enabled = true;
+            currentLevel = sceneManager.LoadLevel("TestLevel2", Content, Player, Camera);
+        }
+
+        public void GoToTitleScreen()
+        {
+            MenuManager.ClearMenus();
+            TransitionToState(GameState.TitleScreen);
+            
+        }
+
+        public void Pause()
+        {
+            TransitionToState(GameState.Paused, false);
+            MenuManager.AddMenu(pauseMenu);
+        }
+
+        public void Unpause()
+        {
+            MenuManager.RemoveTopMenu();
+            TransitionToState(GameState.Playing, false);
+        }
+
+        public void TransitionToState(GameState transitionToState, bool isFading = true)
+        {
+            IsFading = isFading;
+            if (this.transitionToState != transitionToState)
+            {
+                this.transitionToState = transitionToState;
+                if (IsFading)
+                {
+                    transitionTimer = totalTransitionTime;
+                }
+            }
+        }
+
+        public bool IsTransitioningOut()
+        {
+            return transitionTimer > 0 && CurrentGameState != transitionToState;
+        }
+
+        public bool IsTransitioningOut(GameState expectedGameState)
+        {
+            return CurrentGameState != expectedGameState || IsTransitioningOut();
         }
 
         /// <summary>
@@ -142,13 +222,33 @@ namespace NinjaGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
+            inputManager.ReadInputs();
+            
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            currentLevel.Update(gameTime, elapsed);
-            EffectsManager.Update(gameTime, elapsed);
+            MenuManager.Update(elapsed);
+
+            if (_gameState == GameState.Playing)
+            {
+                if (Player.Enabled && inputManager.CurrentAction.pause && !inputManager.PreviousAction.pause)
+                {
+                    Pause();
+                }
+                else
+                {
+                    currentLevel.Update(gameTime, elapsed);
+                    EffectsManager.Update(gameTime, elapsed);
+                }
+            }
+
+            if (_gameState == GameState.TitleScreen && transitionToState == GameState.TitleScreen)
+            {
+                if (!MenuManager.IsMenu)
+                {
+                    // Show the title screen menu only after we've transitioned here.
+                    MenuManager.AddMenu(mainMenu);
+                }
+            }
             
             if (Game1.IS_DEBUG)
             {
@@ -173,8 +273,18 @@ namespace NinjaGame
                 previousKeyState = keyState;
             }
 
-            tempText.Update(gameTime, elapsed);
-            tempObject.Update(gameTime, elapsed);
+            // Handle transitions
+            if (transitionTimer > 0)
+            {
+                transitionTimer -= elapsed;
+            }
+
+            if (transitionTimer <= 0 && transitionToState != CurrentGameState)
+            {
+                // set the timer to transition/fade back in
+                transitionTimer = totalTransitionTime;
+                CurrentGameState = transitionToState;
+            }
 
             base.Update(gameTime);
             
@@ -189,33 +299,57 @@ namespace NinjaGame
             Camera.UpdateTransformation(GraphicsDevice);
             var cameraTransformation = Camera.Transform;
  
-            
             // We'll draw everything to gameRenderTarget, including the white render target.
             GraphicsDevice.SetRenderTarget(gameRenderTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Draw the background.
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap, null, null);
-            spriteBatch.Draw(background, Vector2.Zero, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-            spriteBatch.End();
-
             GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront,
-                  BlendState.AlphaBlend,
-                  SamplerState.PointClamp,
-                  null,
-                  null,
-                  null,
-                  cameraTransformation);
+            switch (_gameState)
+            {
+                case GameState.Playing:
+                case GameState.Paused:
 
-            currentLevel.Draw(spriteBatch, Camera.ScaledViewPort);
+                    spriteBatch.Begin(SpriteSortMode.BackToFront,
+                        BlendState.AlphaBlend,
+                        SamplerState.PointClamp,
+                        null,
+                        null,
+                        null,
+                        cameraTransformation);
 
-            EffectsManager.Draw(spriteBatch);
+                    currentLevel.Draw(spriteBatch, Camera.ScaledViewPort);
 
-            tempText.Draw(spriteBatch);
-            tempObject.Draw(spriteBatch);
+                    EffectsManager.Draw(spriteBatch);
 
+                    break;
+                case GameState.TitleScreen:
+
+                    spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null);
+                    spriteBatch.Draw(titleScreen, new Rectangle(0, 0, GAME_X_RESOLUTION, GAME_Y_RESOLUTION), Color.White);
+
+                    break;
+                default:
+                    throw new NotImplementedException($"Invalid game state: {_gameState}");
+            }
+
+            spriteBatch.End();
+
+            // Draw the menus to a new sprite batch ignoring the camera stuff.
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null);
+            MenuManager.Draw(spriteBatch);
+
+            // Draw some fading black over the screen if we are transitioning between screens
+            if (transitionTimer > 0 && IsFading)
+            {
+                float opacity = (transitionTimer / totalTransitionTime);
+                // fading in vs fading out.
+                if (CurrentGameState != transitionToState)
+                {
+                    opacity = 1.0f - opacity;
+                }
+                DrawBlackOverScreen(spriteBatch, opacity);
+            }
 
             spriteBatch.End();
 
@@ -233,9 +367,21 @@ namespace NinjaGame
             spriteBatch.Draw(gameRenderTarget, new Rectangle(0, 0, Window.ClientBounds.Width, Window.ClientBounds.Height), Color.White);
 
             spriteBatch.End();
-
-
+            
             base.Draw(gameTime);
+        }
+
+        public static void DrawBlackOverScreen(SpriteBatch spriteBatch, float opacity)
+        {
+            spriteBatch.Draw(Game1.simpleSprites, new Rectangle(0, 0, GAME_X_RESOLUTION, GAME_Y_RESOLUTION), Game1.whiteSourceRect, Color.Black * opacity);
+        }
+
+        public enum GameState
+        {
+            TitleScreen,
+            Playing,
+            Paused,
+            Dead
         }
     }
 }

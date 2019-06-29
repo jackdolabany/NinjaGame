@@ -23,7 +23,11 @@ namespace NinjaGame
 
         private AnimationStrip attackAnimation;
 
-        public Player(ContentManager content)
+        public InputManager InputManager { get; private set; }
+
+        private DeadMenu _deadMenu;
+
+        public Player(ContentManager content, InputManager inputManager, DeadMenu deadMenu)
         {
             animations = new AnimationDisplay();
             this.DisplayComponent = animations;
@@ -75,29 +79,16 @@ namespace NinjaGame
             //this.Scale = 3;
 
             //animations.Play("idle");
+
+            InputManager = inputManager;
+            _deadMenu = deadMenu;
+
         }
 
         bool isGrowing = true;
 
         public override void Update(GameTime gameTime, float elapsed)
         {
-
-            //if (isGrowing)
-            //{
-            //    this.Scale += elapsed;
-            //    if (this.Scale > 2f)
-            //    {
-            //        isGrowing = false;
-            //    }
-            //}
-            //else
-            //{
-            //    this.Scale -= elapsed;
-            //    if (this.Scale < 0.5f)
-            //    {
-            //        isGrowing = true;
-            //    }
-            //}
 
             HandleInputs();
 
@@ -139,12 +130,7 @@ namespace NinjaGame
                     // Check body collisions
                     if (CollisionRectangle.Intersects(enemy.CollisionRectangle))
                     {
-                        // Enemy collided with the player. Kill the player
-                        Enabled = false;
-                        EffectsManager.AddBigBloodEffect(WorldCenter);
-                        EffectsManager.RisingText("Dead", WorldCenter);
-                        EffectsManager.EnemyPop(WorldCenter, 10, Color.Red, 50f);
-                        SoundManager.PlaySound("bookClose");
+                        Kill();
                     }
                 }
 
@@ -154,8 +140,6 @@ namespace NinjaGame
 
         private void HandleInputs()
         {
-
-            var keyState = Keyboard.GetState();
 
             const float speed = 140f;
 
@@ -171,7 +155,7 @@ namespace NinjaGame
                 nextAnimation = "jump";
             }
 
-            if (keyState.IsKeyDown(Keys.Left) && !keyState.IsKeyDown(Keys.Right))
+            if (InputManager.CurrentAction.left && !InputManager.CurrentAction.right)
             {
                 this.velocity.X = -speed;
                 if (OnGround)
@@ -179,7 +163,7 @@ namespace NinjaGame
                     nextAnimation = "walk";
                 }
             }
-            if (keyState.IsKeyDown(Keys.Right) && !keyState.IsKeyDown(Keys.Left))
+            if (InputManager.CurrentAction.right && !InputManager.CurrentAction.left)
             {
                 this.velocity.X = speed;
                 if (OnGround)
@@ -189,7 +173,7 @@ namespace NinjaGame
             }
             
             // Jump.
-            if (OnGround && keyState.IsKeyDown(Keys.Space) && !previousKeyState.IsKeyDown(Keys.Space))
+            if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump)
             {
                 this.velocity.Y = -400;
                 nextAnimation = "jump";
@@ -197,7 +181,7 @@ namespace NinjaGame
             }
 
             // Attack.
-            if (keyState.IsKeyDown(Keys.LeftShift) && !previousKeyState.IsKeyDown(Keys.LeftShift))
+            if (InputManager.CurrentAction.attack && !InputManager.PreviousAction.attack)
             {
                 nextAnimation = "attack";
                 
@@ -217,9 +201,16 @@ namespace NinjaGame
                 }
                 
             }
+        }
 
-            previousKeyState = keyState;
-
+        public void Kill()
+        {
+            Enabled = false;
+            EffectsManager.AddBigBloodEffect(WorldCenter);
+            EffectsManager.RisingText("Dead", WorldCenter);
+            EffectsManager.EnemyPop(WorldCenter, 10, Color.Red, 50f);
+            SoundManager.PlaySound("bookClose");
+            MenuManager.AddMenu(_deadMenu);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

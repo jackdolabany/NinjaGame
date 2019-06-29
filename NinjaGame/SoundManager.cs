@@ -128,6 +128,9 @@ namespace NinjaGame
             LoadSound("cloth1");
             LoadSound("bookClose");
             LoadSound("swordMetal7");
+            LoadSound("rollover1");
+            LoadSound("rollover2");
+            LoadSound("chop");
 
             // Music.
             LoadSong("Retro Mystic");

@@ -70,6 +70,8 @@ namespace NinjaGame
                 }
             }
 
+            camera.Map = level.Map;
+
             return level;
 
         }
