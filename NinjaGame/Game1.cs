@@ -227,6 +227,7 @@ namespace NinjaGame
             var elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             MenuManager.Update(elapsed);
+            SoundManager.Update(elapsed);
 
             if (_gameState == GameState.Playing)
             {
