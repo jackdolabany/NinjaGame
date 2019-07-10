@@ -25,6 +25,12 @@ namespace NinjaGame
 
         private DeadMenu _deadMenu;
 
+        /// <summary>
+        /// As longas you hold the jump button down and this timer doesn't run out, you'll continue to soar!
+        /// This is so the player can do quick jumps or little ones.
+        /// </summary>
+        private float JumpButtonIsStillHeldDownTimer;
+
         public Player(ContentManager content, InputManager inputManager, DeadMenu deadMenu)
         {
             animations = new AnimationDisplay();
@@ -86,7 +92,7 @@ namespace NinjaGame
         public override void Update(GameTime gameTime, float elapsed)
         {
 
-            HandleInputs();
+            HandleInputs(elapsed);
 
             if (Velocity.X > 0)
             {
@@ -134,7 +140,7 @@ namespace NinjaGame
             
         }
 
-        private void HandleInputs()
+        private void HandleInputs(float elapsed)
         {
 
             const float speed = 140f;
@@ -167,13 +173,25 @@ namespace NinjaGame
                     nextAnimation = "walk";
                 }
             }
-            
+
             // Jump.
-            if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump)
+            if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump && OnGround)
             {
-                this.velocity.Y = -400;
+                this.velocity.Y = -250;
                 nextAnimation = "jump";
                 SoundManager.PlaySound("cloth1");
+                JumpButtonIsStillHeldDownTimer = 0.3f;
+            }
+            else if (!OnGround && JumpButtonIsStillHeldDownTimer > 0 && InputManager.CurrentAction.jump && InputManager.PreviousAction.jump)
+            {
+                // Holding down jump to continue a jump.
+                this.velocity.Y = -250;
+                JumpButtonIsStillHeldDownTimer -= elapsed;
+            }
+            else
+            {
+                // Not jumping
+                JumpButtonIsStillHeldDownTimer = 0f;
             }
 
             // Attack.
