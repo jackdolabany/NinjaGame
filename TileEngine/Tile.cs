@@ -7,6 +7,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace TileEngine
 {
+    /// <summary>
+    /// A single tile in a single layer on the map.
+    /// </summary>
     public class Tile
     {
         public int TileIndex { get; set; }

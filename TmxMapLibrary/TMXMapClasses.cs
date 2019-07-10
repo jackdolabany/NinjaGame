@@ -642,12 +642,6 @@ namespace Squared.Tiled
 
             tileMap.Backgrounds = this.Properties.Where(p => p.Key.ToLower().StartsWith("background")).Select(p => p.Value.ToLower()).ToList();
 
-            var mapEnvironments = this.Properties.Where(p => p.Key == "environment");
-            if (mapEnvironments.Any())
-            {
-                var mapEnvironment = mapEnvironments.Single().Value;
-                tileMap.MapEnvironment = (TileEngine.MapEnvironment)Enum.Parse(typeof(TileEngine.MapEnvironment), mapEnvironment);
-            }
             var zoom = this.Properties.Where(p => p.Key.ToLower() == "zoom").Select(p => p.Value).SingleOrDefault();
             if (zoom != null)
             {
@@ -766,8 +760,26 @@ namespace Squared.Tiled
                         {
                             tileMap.MapCells[x][y].LevelNumber = int.Parse(tileInfo.properties["LevelNumber"]);
                         }
-                        
-                        if(layer.Name.ToLower() != "collisions" && layer.Name.ToLower() != "gameobjects")
+
+                        if (tileInfo.properties.ContainsKey("KillPlayer"))
+                        {
+                            switch (tileInfo.properties["KillPlayer"].ToLower())
+                            {
+                                case "top":
+                                    tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Top;
+                                    break;
+                                case "bottom":
+                                    tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Bottom;
+                                    break;
+                                default:
+                                    tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Full;
+                                    break;
+                            }
+                        }
+
+                        var shouldDrawTile = layer.Name.ToLower() != "collisions" && !tileInfo.properties.ContainsKey("LoadClass");
+
+                        if(shouldDrawTile)
                         {
                             //only if the cell doesn't have the previous properties do we consider it something we should draw!
                             var tile = tileMap.MapCells[x][y].LayerTiles[z];

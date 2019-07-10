@@ -69,7 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapMetaDataImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileImageProcessor.cs" />
     <Compile Include="TMXMapImporter.cs" />

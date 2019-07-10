@@ -12,8 +12,6 @@ namespace NinjaGame
 {
     public class Player : GameObject
     {
-        KeyboardState previousKeyState;
-
         AnimationDisplay animations;
 
         private Rectangle attackRectangle;
@@ -84,8 +82,6 @@ namespace NinjaGame
             _deadMenu = deadMenu;
 
         }
-
-        bool isGrowing = true;
 
         public override void Update(GameTime gameTime, float elapsed)
         {
@@ -184,7 +180,6 @@ namespace NinjaGame
             if (InputManager.CurrentAction.attack && !InputManager.PreviousAction.attack)
             {
                 nextAnimation = "attack";
-                
             }
 
             if (animations.currentAnimationName != nextAnimation)

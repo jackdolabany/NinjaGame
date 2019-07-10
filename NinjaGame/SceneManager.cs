@@ -37,6 +37,12 @@ namespace NinjaGame
                             mapSquare.LayerTiles[z].Texture = contentManager.Load<Texture2D>(mapSquare.LayerTiles[z].TexturePath);
                         }
 
+                        if (mapSquare.KillPlayer != TileEngine.KillPlayer.DoNotKillPlayer)
+                        {
+                            var killPlayer = new KillPlayerCell(contentManager, x, y, player, camera, mapSquare.KillPlayer);
+                            level.Enemies.Add(killPlayer);
+                        }
+
                         var loadClass = mapSquare.LayerTiles[z].LoadClass;
                         if (!string.IsNullOrEmpty(loadClass))
                         {

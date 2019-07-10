@@ -9,7 +9,6 @@ namespace NinjaGame
     public class Enemy1 : Enemy
     {
 
-        float shootTimer = 0;
         AnimationDisplay animations;
 
         public Enemy1(ContentManager content, int cellX, int cellY, Player player, Camera camera)

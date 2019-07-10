@@ -36,6 +36,26 @@
    <property name="BlockPlayer" type="int" value="1"/>
   </properties>
  </tile>
+ <tile id="210">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="211">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="212">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="213">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
  <tile id="225">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -81,6 +101,26 @@
    <property name="BlockPlayer" type="int" value="1"/>
   </properties>
  </tile>
+ <tile id="274">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="275">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="276">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="277">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
  <tile id="297">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -111,6 +151,16 @@
    <property name="BlockPlayer" type="int" value="1"/>
   </properties>
  </tile>
+ <tile id="342">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="343">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
  <tile id="361">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -124,6 +174,66 @@
  <tile id="363">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
+  </properties>
+ </tile>
+ <tile id="371">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="372">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="373">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="374">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="375">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="376">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="403">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="404">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="405">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="406">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="407">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="408">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
   </properties>
  </tile>
  <tile id="424">
@@ -176,6 +286,16 @@
    <property name="BlockPlayer" type="int" value="1"/>
   </properties>
  </tile>
+ <tile id="470">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="471">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
  <tile id="488">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -201,6 +321,36 @@
    <property name="BlockPlayer" type="int" value="1"/>
   </properties>
  </tile>
+ <tile id="499">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="500">
+  <properties>
+   <property name="KillPlayer" value="Bottom"/>
+  </properties>
+ </tile>
+ <tile id="501">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="502">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="503">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="504">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
  <tile id="520">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -224,6 +374,36 @@
  <tile id="525">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
+  </properties>
+ </tile>
+ <tile id="531">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="532">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="533">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="534">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="535">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="536">
+  <properties>
+   <property name="KillPlayer" value="Full"/>
   </properties>
  </tile>
  <tile id="552">

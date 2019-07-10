@@ -6,11 +6,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TileEngine
 {
+    /// <summary>
+    /// Represents all of the tiles in a grid location in the map. 
+    /// </summary>
     public class MapSquare
     {
         public Tile[] LayerTiles { get; set; }
-        public string Door { get; set; }
         public bool Passable { get; set; }
+
+        /// <summary>
+        /// Tiles that should kill the player instantly. 
+        /// </summary>
+        public KillPlayer KillPlayer { get; set; }
 
         /// <summary>
         /// Only for the WorldMap. Each square represents part of a level.
@@ -47,7 +54,6 @@ namespace TileEngine
         {
             LayerTiles = new Tile[depth];
             Passable = passable;
-            Door = "";
         }
 
         public MapSquare()

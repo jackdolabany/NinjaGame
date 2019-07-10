@@ -44,11 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapEnvironment.cs" />
-    <Compile Include="MapLevelMetaData.cs" />
-    <Compile Include="MapMetaData.cs" />
     <Compile Include="MapSquare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="KillPlayer.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileMap.cs" />
   </ItemGroup>

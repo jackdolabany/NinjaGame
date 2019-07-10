@@ -70,8 +70,6 @@ namespace TileEngine
 
         public List<String> Backgrounds { get; set; }
 
-        public MapEnvironment MapEnvironment { get; set; }
-
         public float GetLayerDrawDepth(int layer)
         {
             return LEVEL_DRAW_DEPTH - layer * GetLayerIncrement();
