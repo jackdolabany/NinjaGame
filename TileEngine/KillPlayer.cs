@@ -5,6 +5,8 @@
         DoNotKillPlayer,
         Full,
         Top,
-        Bottom
+        Bottom,
+        Left,
+        Right
     }
 }

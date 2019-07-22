@@ -236,6 +236,11 @@
    <property name="KillPlayer" value="Full"/>
   </properties>
  </tile>
+ <tile id="409">
+  <properties>
+   <property name="KillPlayer" value="Left"/>
+  </properties>
+ </tile>
  <tile id="424">
   <properties>
    <property name="BlockPlayer" type="int" value="1"/>
@@ -404,6 +409,11 @@
  <tile id="536">
   <properties>
    <property name="KillPlayer" value="Full"/>
+  </properties>
+ </tile>
+ <tile id="537">
+  <properties>
+   <property name="KillPlayer" value="Left"/>
   </properties>
  </tile>
  <tile id="552">

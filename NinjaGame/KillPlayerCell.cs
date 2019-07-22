@@ -16,7 +16,6 @@ namespace NinjaGame
             : base(content, cellX, cellY, player, camera)
         {
             this.DisplayComponent = new NoDisplay();
-         
             
             isEnemyTileColliding = false;
             Attack = 1;
@@ -41,6 +40,12 @@ namespace NinjaGame
                     break;
                 case KillPlayer.Bottom:
                     this.collisionRectangle = new Rectangle(0, TileMap.TileSize / 2, TileMap.TileSize, TileMap.TileSize / 2);
+                    break;
+                case KillPlayer.Left:
+                    this.collisionRectangle = new Rectangle(0, 0, TileMap.TileSize / 2, TileMap.TileSize);
+                    break;
+                case KillPlayer.Right:
+                    this.collisionRectangle = new Rectangle(TileMap.TileSize / 2, 0, TileMap.TileSize / 2, TileMap.TileSize);
                     break;
                 default:
                     throw new NotImplementedException("Unsupported KillPlayer value.");

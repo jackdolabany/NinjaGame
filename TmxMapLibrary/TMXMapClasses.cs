@@ -771,6 +771,12 @@ namespace Squared.Tiled
                                 case "bottom":
                                     tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Bottom;
                                     break;
+                                case "left":
+                                    tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Left;
+                                    break;
+                                case "right":
+                                    tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Right;
+                                    break;
                                 default:
                                     tileMap.MapCells[x][y].KillPlayer = TileEngine.KillPlayer.Full;
                                     break;
