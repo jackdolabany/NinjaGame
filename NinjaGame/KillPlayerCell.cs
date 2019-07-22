@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,9 +13,14 @@ namespace NinjaGame
     public class KillPlayerCell : Enemy
     {
 
-        public KillPlayerCell(ContentManager content, int cellX, int cellY, Player player, Camera camera, KillPlayer killPlayer)
+        private IEnumerable<Enemy> _enemies;
+
+        public KillPlayerCell(ContentManager content, int cellX, int cellY, Player player, Camera camera, KillPlayer killPlayer, IEnumerable<Enemy> enemies)
             : base(content, cellX, cellY, player, camera)
         {
+
+            this._enemies = enemies;
+
             this.DisplayComponent = new NoDisplay();
             
             isEnemyTileColliding = false;
@@ -55,7 +61,13 @@ namespace NinjaGame
 
         public override void Update(GameTime gameTime, float elapsed)
         {
-
+            foreach (var enemy in _enemies)
+            {
+                if (enemy.Enabled && enemy.CollisionRectangle.Intersects(this.CollisionRectangle))
+                {
+                    enemy.Kill();
+                }
+            }
         }
 
     }

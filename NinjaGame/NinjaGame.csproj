@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="AnimationDisplay.cs" />
     <Compile Include="AnimationStrip.cs" />
+    <Compile Include="Chair.cs" />
+    <Compile Include="Barrel.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DisplayComponent.cs" />
     <Compile Include="DrawLayers.cs" />

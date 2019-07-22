@@ -11,4 +11,14 @@
    <property name="LoadClass" value="Enemy.Enemy1"/>
   </properties>
  </tile>
+ <tile id="2">
+  <properties>
+   <property name="LoadClass" value="Chair"/>
+  </properties>
+ </tile>
+ <tile id="3">
+  <properties>
+   <property name="LoadClass" value="Barrel"/>
+  </properties>
+ </tile>
 </tileset>

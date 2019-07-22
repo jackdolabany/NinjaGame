@@ -37,9 +37,9 @@ namespace NinjaGame
                             mapSquare.LayerTiles[z].Texture = contentManager.Load<Texture2D>(mapSquare.LayerTiles[z].TexturePath);
                         }
 
-                        if (mapSquare.KillPlayer != TileEngine.KillPlayer.DoNotKillPlayer)
+                        if (mapSquare.KillPlayer != KillPlayer.DoNotKillPlayer)
                         {
-                            var killPlayer = new KillPlayerCell(contentManager, x, y, player, camera, mapSquare.KillPlayer);
+                            var killPlayer = new KillPlayerCell(contentManager, x, y, player, camera, mapSquare.KillPlayer, level.Enemies);
                             level.Enemies.Add(killPlayer);
                         }
 
@@ -69,7 +69,17 @@ namespace NinjaGame
                             }
                             else if (loadClass == "Player")
                             {
-                                player.WorldLocation = new Vector2((x * TileMap.TileSize) + (TileMap.TileSize / 2), (y + 2) * TileMap.TileSize);
+                                player.WorldLocation = new Vector2((x * TileMap.TileSize) + (TileMap.TileSize / 2), (y + 1) * TileMap.TileSize);
+                            }
+                            else if (loadClass == "Barrel")
+                            {
+                                var barrel = new Barrel(contentManager, x, y, player, level.Enemies);
+                                level.GameObjects.Add(barrel);
+                            }
+                            else if (loadClass == "Chair")
+                            {
+                                var barrel = new Chair(contentManager, x, y, player, level.Enemies);
+                                level.GameObjects.Add(barrel);
                             }
                         }
                     }

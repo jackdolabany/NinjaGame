@@ -307,7 +307,7 @@ namespace NinjaGame
                 }
             }
 
-            // sorry for the player hack :(
+            // Sorry for the player hack :(
             bool isPlayer = this is Player;
 
             for (int i = 0; i <= pixelCount - 1; i++)
@@ -317,7 +317,7 @@ namespace NinjaGame
 
                 if (mapSquare != null && (!mapSquare.Passable || (isEnemyTileColliding && !mapSquare.EnemyPassable)))
                 {
-                    //there was a collision, place the object to the edge of the tile.
+                    // There was a collision, place the object to the edge of the tile.
                     if (isMovingRight)
                     {
                         int mapCellLeft = Game1.CurrentMap.GetCellByPixelX(pixel.X) * TileMap.TileSize;
@@ -326,7 +326,7 @@ namespace NinjaGame
                     }
                     else
                     {
-                        //moving left
+                        // Moving left
                         int mapCellRight = ((Game1.CurrentMap.GetCellByPixelX(pixel.X) + 1) * TileMap.TileSize) - 1;
                         moveAmount.X = Math.Max(moveAmount.X, mapCellRight - CollisionRectangle.Left + 1);
                         onLeftWall = true;
@@ -593,7 +593,7 @@ namespace NinjaGame
 
             if (!IsAbleToMoveOutsideOfWorld)
             {
-                //only clamp the x position in the world. If they fall out of the world, they are toast.
+                // only clamp the x position in the world. If they fall out of the world, they are toast.
                 if (CollisionRectangle.Left < 0)
                 {
                     newPosition.X -= CollisionRectangle.Left;

@@ -19,6 +19,7 @@ namespace NinjaGame
         public TileMap Map;
         public Camera Camera;
         public List<Enemy> Enemies;
+        public List<GameObject> GameObjects;
 
         public Level(Player player, TileMap map, Camera camera)
         {
@@ -26,6 +27,7 @@ namespace NinjaGame
             Map = map;
             Camera = camera;
             Enemies = new List<Enemy>();
+            GameObjects = new List<GameObject>();
         }
 
         public void Update(GameTime gameTime, float elapsed)
@@ -35,6 +37,11 @@ namespace NinjaGame
             foreach (var enemy in Enemies)
             {
                 enemy.Update(gameTime, elapsed);
+            }
+
+            foreach (var gameObject in GameObjects)
+            {
+                gameObject.Update(gameTime, elapsed);
             }
 
             // Check collisions
@@ -57,6 +64,11 @@ namespace NinjaGame
             foreach (var enemy in Enemies)
             {
                 enemy.Draw(spriteBatch);
+            }
+
+            foreach (var gameObject in GameObjects)
+            {
+                gameObject.Draw(spriteBatch);
             }
         }
     }

@@ -27,7 +27,7 @@ namespace NinjaGame
             
             isEnemyTileColliding = true;
             Attack = 1;
-            Health = 3;
+            Health = 1;
             IsAffectedByGravity = true;
 
             SetCenteredCollisionRectangle(16, 26);

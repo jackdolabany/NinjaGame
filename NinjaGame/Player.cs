@@ -14,7 +14,7 @@ namespace NinjaGame
     {
         AnimationDisplay animations;
 
-        private Rectangle attackRectangle;
+        public Rectangle AttackRectangle;
 
         // Keeps track of the enemies already stabbed for a given knife swing.
         private List<Enemy> stabbedEnemies = new List<Enemy>(5);
@@ -105,13 +105,13 @@ namespace NinjaGame
 
             base.Update(gameTime, elapsed);
 
-            attackRectangle = Rectangle.Empty;
+            AttackRectangle = Rectangle.Empty;
             if (animations.currentAnimationName == "attack" && attackAnimation.currentFrame >= 2)
             {
-                attackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 10, 15);
+                AttackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 10, 15);
                 if (flipped)
                 {
-                    attackRectangle.X -= (this.collisionRectangle.Width + attackRectangle.Width);
+                    AttackRectangle.X -= (this.collisionRectangle.Width + AttackRectangle.Width);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace NinjaGame
         {
             if(enemy.Alive)
             {
-                if (attackRectangle.Intersects(enemy.CollisionRectangle) && !stabbedEnemies.Contains(enemy))
+                if (AttackRectangle.Intersects(enemy.CollisionRectangle) && !stabbedEnemies.Contains(enemy))
                 {
                     stabbedEnemies.Add(enemy);
                     var force = enemy.WorldCenter - this.WorldCenter;
@@ -230,13 +230,23 @@ namespace NinjaGame
         {
 
             // Draw Collision Rectangle in reddish
-            if (DrawCollisionRect || Game1.DrawAllCollisisonRects && !attackRectangle.IsEmpty)
+            if (DrawCollisionRect || Game1.DrawAllCollisisonRects && !AttackRectangle.IsEmpty)
             {
                 Color color = Color.Aquamarine * 0.25f;
-                spriteBatch.Draw(Game1.simpleSprites, attackRectangle, Game1.whiteSourceRect, color);
+                spriteBatch.Draw(Game1.simpleSprites, AttackRectangle, Game1.whiteSourceRect, color);
             }
 
             base.Draw(spriteBatch);
+        }
+
+        public bool IsFacingRight()
+        {
+            return !this.flipped;
+        }
+
+        public bool IsFacingLeft()
+        {
+            return !IsFacingRight();
         }
     }
 }
