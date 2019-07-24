@@ -45,7 +45,7 @@ namespace NinjaGame
             var walkImage = content.Load<Texture2D>(@"Textures\ninja\walk");
             var walk = new AnimationStrip(walkImage, 48, "walk");
             walk.LoopAnimation = true;
-            walk.FrameLength = 0.06f;
+            walk.FrameLength = 0.1f;
             animations.Add(walk);
 
             var jumpImage = content.Load<Texture2D>(@"Textures\ninja\jump");
@@ -143,7 +143,7 @@ namespace NinjaGame
         private void HandleInputs(float elapsed)
         {
 
-            const float speed = 70;
+            const float speed = 35;
 
             this.velocity.X = 0;
 

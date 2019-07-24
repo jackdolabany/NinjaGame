@@ -62,7 +62,7 @@ namespace NinjaGame
             {
                 spriteBatch.Draw(
                     DrawObject.Texture,
-                    new Vector2(DrawObject.Position.X, DrawObject.Position.Y),
+                    new Vector2((int)DrawObject.Position.X, (int)DrawObject.Position.Y),
                     DrawObject.SourceRectangle,
                     this.TintColor,
                     this.Rotation,

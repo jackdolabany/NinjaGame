@@ -304,7 +304,7 @@ namespace NinjaGame
             GraphicsDevice.SetRenderTarget(gameRenderTarget);
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+            GraphicsDevice.SamplerStates[0] = SamplerState.PointClamp;
 
             switch (_gameState)
             {
