@@ -29,18 +29,18 @@ namespace NinjaGame
                 {
                     var mapSquare = map.GetMapSquareAtCell(x, y);
 
+                    if (mapSquare.KillPlayer != KillPlayer.DoNotKillPlayer)
+                    {
+                        var killPlayer = new KillPlayerCell(contentManager, x, y, player, camera, mapSquare.KillPlayer, level.Enemies);
+                        level.killPlayerCells.Add(killPlayer);
+                    }
+
                     for (int z = 0; z < mapSquare.LayerTiles.Length; z++)
                     {
                         // Load the textures so the map can draw.
                         if (mapSquare.LayerTiles[z].TileIndex > 0) // by convention 0 is a null texture on all tile sets
                         {
                             mapSquare.LayerTiles[z].Texture = contentManager.Load<Texture2D>(mapSquare.LayerTiles[z].TexturePath);
-                        }
-
-                        if (mapSquare.KillPlayer != KillPlayer.DoNotKillPlayer)
-                        {
-                            var killPlayer = new KillPlayerCell(contentManager, x, y, player, camera, mapSquare.KillPlayer, level.Enemies);
-                            level.Enemies.Add(killPlayer);
                         }
 
                         var loadClass = mapSquare.LayerTiles[z].LoadClass;

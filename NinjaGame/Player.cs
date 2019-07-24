@@ -43,9 +43,9 @@ namespace NinjaGame
             animations.Add(idle);
 
             var walkImage = content.Load<Texture2D>(@"Textures\ninja\walk");
-            var walk = new AnimationStrip(walkImage, 32, "walk");
+            var walk = new AnimationStrip(walkImage, 48, "walk");
             walk.LoopAnimation = true;
-            walk.FrameLength = 0.1f;
+            walk.FrameLength = 0.06f;
             animations.Add(walk);
 
             var jumpImage = content.Load<Texture2D>(@"Textures\ninja\jump");
@@ -54,7 +54,7 @@ namespace NinjaGame
             animations.Add(jump);
 
             var attackImage = content.Load<Texture2D>(@"Textures\ninja\attack");
-            attackAnimation = new AnimationStrip(attackImage, 32, "attack");
+            attackAnimation = new AnimationStrip(attackImage, 48, "attack");
             attackAnimation.Oscillate = true;
             attackAnimation.FrameLength = 0.05f;
             animations.Add(attackAnimation);
@@ -108,7 +108,7 @@ namespace NinjaGame
             AttackRectangle = Rectangle.Empty;
             if (animations.currentAnimationName == "attack" && attackAnimation.currentFrame >= 2)
             {
-                AttackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 10, 15);
+                AttackRectangle = new Rectangle(this.CollisionRectangle.Right, this.CollisionRectangle.Y, 13, 15);
                 if (flipped)
                 {
                     AttackRectangle.X -= (this.collisionRectangle.Width + AttackRectangle.Width);
@@ -143,7 +143,7 @@ namespace NinjaGame
         private void HandleInputs(float elapsed)
         {
 
-            const float speed = 140f;
+            const float speed = 70;
 
             this.velocity.X = 0;
 

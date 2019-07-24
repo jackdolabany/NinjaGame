@@ -10,29 +10,22 @@ namespace NinjaGame
     /// <summary>
     /// Represents a tile that kills the player. Maybe spikes or a bottomless pit or something.
     /// </summary>
-    public class KillPlayerCell : Enemy
+    public class KillPlayerCell : GameObject
     {
 
         private IEnumerable<Enemy> _enemies;
 
         public KillPlayerCell(ContentManager content, int cellX, int cellY, Player player, Camera camera, KillPlayer killPlayer, IEnumerable<Enemy> enemies)
-            : base(content, cellX, cellY, player, camera)
+            : base()
         {
 
             this._enemies = enemies;
 
-            this.DisplayComponent = new NoDisplay();
-            
-            isEnemyTileColliding = false;
-            Attack = 1;
-            Health = 3;
-            IsAffectedByGravity = false;
+            this.Enabled = true;
 
-            IsAbleToMoveOutsideOfWorld = true;
-            IsAffectedByForces = false;
-            IsAffectedByPlatforms = false;
-            IsCustomPlayerColliding = false;
-            IsAbleToSurviveOutsideOfWorld = true;
+            this.DisplayComponent = new NoDisplay();
+
+            this.WorldLocation = new Vector2(TileMap.TileSize * cellX, TileMap.TileSize * cellY);
 
             SetCenteredCollisionRectangle(16, 26);
 
@@ -59,15 +52,9 @@ namespace NinjaGame
 
         }
 
-        public override void Update(GameTime gameTime, float elapsed)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var enemy in _enemies)
-            {
-                if (enemy.Enabled && enemy.CollisionRectangle.Intersects(this.CollisionRectangle))
-                {
-                    enemy.Kill();
-                }
-            }
+            base.Draw(spriteBatch);
         }
 
     }

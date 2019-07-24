@@ -25,12 +25,12 @@
  </layer>
  <layer id="3" name="props" width="50" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3STQ4BQRAF4O7rSIyw5QAiMcyaA9gQ1hyCNQewZGduwm28CEntdEdV90Tel7zMbKb+Ms4RERERETVTHxnkHkLBDJln6q15wy2yS9hP0rzhETkl7CeF3DBUyB6a/aTCO9fxOrVC9tDsJ5WoOVGqe0PqhP2s3JFH7iF+0MV9ew2/8TdTzF8Z79CyLf+yxg4bb9trZFj7Y48dDj6+VxsZivdCd6xoF+xwFf/VOeLbxfs5RkrFmXJZIqvcQ9BfewKNsh8hcBcAAA==
+   H4sIAAAAAAAACu2UTU4CQRBGu69jIka2egBDwiBBVJADuIFAVEDgEBr5EzyAS9jJTfQ2vBhIeudMrO5hknrJy8yG+uqrkDFGURRFURRFUQ6TMzxPewkB7rCRUrbkDYc4CpjnInnDJX4EzHOJc8O4xOkhmeeSs8acWJlZcXpI5rlEzCwJzf3CTcA8X3zjT9pL/INT7ps/8Bv/xSX7lz13OPI7/pc2HTrWb1bB4+w9L3R4tcmzjvHCec/JrpWYFR3Wzv/qM8Fv73fPIkaCO6VFE1uC8yrc9QqreI03eIs1rGfoe/TAro/4hF3sYR+fcZChHm/sOsYJTnGGc3zHRaAeW9lMwA1wFwAA
   </data>
  </layer>
  <layer id="5" name="objects" width="50" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3TyQ2CQBhA4YEDpdiNYoIrbSi4FGAD7lbrO5B40MQlKkrel7wwCRPmnwMhSJIkSZL0Oau6B5B+mP9H8yRP7G3Hl3W3WqfVsxNf73/VvW/det963/GNlkUh9KhPAxrSiMaUR3VP97gJs06poJJmNKcFLf/oHmtm3dCWdrSnAx3p9KV7nAHLE6PVcBcAAA==
+   H4sIAAAAAAAACu3TywmAMAwA0NqDo7iNn6lcwXW9FDxYkBa1Iu9dEkhIckkIAAAA8Jy19QHwYf7jf/qC3jEe+ZLyOcUpnvtrXc3K1Yf71kMzW/f+zh3GKRdrcBcAAA==
   </data>
  </layer>
  <layer id="8" name="collisions" width="50" height="30" opacity="0.13">

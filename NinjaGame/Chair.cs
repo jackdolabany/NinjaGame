@@ -53,7 +53,6 @@ namespace NinjaGame
                     }
                 }
                 else
-
                 {
                     // Check for enemy collisions
                     foreach (var enemy in _enemies)

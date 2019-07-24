@@ -19,6 +19,7 @@ namespace NinjaGame
         public TileMap Map;
         public Camera Camera;
         public List<Enemy> Enemies;
+        public List<KillPlayerCell> killPlayerCells;
         public List<GameObject> GameObjects;
 
         public Level(Player player, TileMap map, Camera camera)
@@ -27,6 +28,7 @@ namespace NinjaGame
             Map = map;
             Camera = camera;
             Enemies = new List<Enemy>();
+            killPlayerCells = new List<KillPlayerCell>();
             GameObjects = new List<GameObject>();
         }
 
@@ -55,6 +57,25 @@ namespace NinjaGame
                     }
                 }
             }
+
+            // Check for spikes and other kill player cells
+            foreach (var killPlayerCell in killPlayerCells)
+            {
+                if (killPlayerCell.Enabled)
+                {
+                    foreach (var enemy in Enemies)
+                    {
+                        if (enemy.Enabled && enemy.CollisionRectangle.Intersects(killPlayerCell.CollisionRectangle))
+                        {
+                            enemy.Kill();
+                        }
+                    }
+                    if (Player.Enabled && Player.CollisionRectangle.Intersects(killPlayerCell.CollisionRectangle))
+                    {
+                        Player.Kill();
+                    }
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Rectangle scaledViewPort)
@@ -69,6 +90,11 @@ namespace NinjaGame
             foreach (var gameObject in GameObjects)
             {
                 gameObject.Draw(spriteBatch);
+            }
+
+            foreach (var killPlayerCell in killPlayerCells)
+            {
+                killPlayerCell.Draw(spriteBatch);
             }
         }
     }
