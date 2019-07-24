@@ -86,6 +86,9 @@ namespace NinjaGame
             Window.Title = "Ninja Game";
 
             Content.RootDirectory = "Content";
+            SoundManager.MusicVolume = 0;
+            //SoundManager.SoundEffectVolume = 0;
+
         }
 
         /// <summary>
