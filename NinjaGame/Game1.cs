@@ -79,8 +79,10 @@ namespace NinjaGame
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = GAME_X_RESOLUTION * 3;
-            graphics.PreferredBackBufferHeight = GAME_Y_RESOLUTION * 3;
+            var scale = 4;
+
+            graphics.PreferredBackBufferWidth = GAME_X_RESOLUTION * scale;
+            graphics.PreferredBackBufferHeight = GAME_Y_RESOLUTION * scale;
 
             Window.AllowUserResizing = true;
             Window.Title = "Ninja Game";

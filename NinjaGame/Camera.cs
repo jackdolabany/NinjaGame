@@ -53,7 +53,7 @@ namespace NinjaGame
 
         public void UpdateTransformation(GraphicsDevice graphicsDevice)
         {
-            var translationMatrix = Matrix.CreateTranslation(new Vector3(-position.X, -position.Y, 0));
+            var translationMatrix = Matrix.CreateTranslation(new Vector3(-(int)position.X, -(int)position.Y, 0));
             var rotationMatrix = Matrix.CreateRotationZ(Rotation);
             var scaleMatrix = Matrix.CreateScale(new Vector3(Zoom, Zoom, 1f));
             var originMatrix = Matrix.CreateTranslation(new Vector3(viewPortSize.X / 2f, viewPortSize.Y / 2f, 0));
