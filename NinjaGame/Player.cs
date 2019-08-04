@@ -31,39 +31,51 @@ namespace NinjaGame
         /// </summary>
         private float JumpButtonIsStillHeldDownTimer;
 
+        private float speed;
+        private float jumpSpeed;
+
         public Player(ContentManager content, InputManager inputManager, DeadMenu deadMenu)
         {
-            animations = new AnimationDisplay();
+            //animations = new AnimationDisplay();
+            //this.DisplayComponent = animations;
+
+            var config = CharacterConfig.GetCharacterConfig(@"Content\Textures\ninja\Player.json");
+
+            this.speed = config.Speed;
+            this.jumpSpeed = config.JumpSpeed;
+
+            this.animations = CharacterConfig.GetAnimationDisplay(config, content);
             this.DisplayComponent = animations;
 
-            var idleImage = content.Load<Texture2D>(@"Textures\ninja\idle");
-            var idle = new AnimationStrip(idleImage, 32, "idle");
-            idle.LoopAnimation = true;
-            idle.FrameLength = 0.1f;
-            animations.Add(idle);
+            this.attackAnimation = this.animations.animations["attack"];
 
-            var walkImage = content.Load<Texture2D>(@"Textures\ninja\walk");
-            var walk = new AnimationStrip(walkImage, 48, "walk");
-            walk.LoopAnimation = true;
-            walk.FrameLength = 0.14f;
-            animations.Add(walk);
+            //var idleImage = content.Load<Texture2D>(@"Textures\ninja\idle");
+            //var idle = new AnimationStrip(idleImage, 32, "idle");
+            //idle.LoopAnimation = true;
+            //idle.FrameLength = 0.1f;
+            //animations.Add(idle);
 
-            var jumpImage = content.Load<Texture2D>(@"Textures\ninja\jump");
-            var jump = new AnimationStrip(jumpImage, 36, "jump");
-            jump.FrameLength = 0.1f;
-            animations.Add(jump);
+            //var walkImage = content.Load<Texture2D>(@"Textures\ninja\walk");
+            //var walk = new AnimationStrip(walkImage, 48, "walk");
+            //walk.LoopAnimation = true;
+            //walk.FrameLength = 0.14f;
+            //animations.Add(walk);
 
-            var attackImage = content.Load<Texture2D>(@"Textures\ninja\attack");
-            attackAnimation = new AnimationStrip(attackImage, 48, "attack");
-            attackAnimation.Oscillate = true;
-            attackAnimation.FrameLength = 0.05f;
-            animations.Add(attackAnimation);
+            //var jumpImage = content.Load<Texture2D>(@"Textures\ninja\jump");
+            //var jump = new AnimationStrip(jumpImage, 36, "jump");
+            //jump.FrameLength = 0.1f;
+            //animations.Add(jump);
+
+            //var attackImage = content.Load<Texture2D>(@"Textures\ninja\attack");
+            //attackAnimation = new AnimationStrip(attackImage, 48, "attack");
+            //attackAnimation.Oscillate = true;
+            //attackAnimation.FrameLength = 0.05f;
+            //animations.Add(attackAnimation);
 
             Enabled = true;
 
             // TODO: Whatever
             //cd.DrawDepth = 0.5f;
-            //this.WorldLocation = new Vector2(100, 100);
 
             this.IsAbleToMoveOutsideOfWorld = true;
             this.IsAbleToSurviveOutsideOfWorld = true;
@@ -88,6 +100,8 @@ namespace NinjaGame
             _deadMenu = deadMenu;
 
         }
+
+
 
         public override void Update(GameTime gameTime, float elapsed)
         {
@@ -143,8 +157,6 @@ namespace NinjaGame
         private void HandleInputs(float elapsed)
         {
 
-            const float speed = 50;
-
             this.velocity.X = 0;
 
             string nextAnimation = null;
@@ -177,7 +189,7 @@ namespace NinjaGame
             // Jump.
             if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump && OnGround)
             {
-                this.velocity.Y = -250;
+                this.velocity.Y = -jumpSpeed;
                 nextAnimation = "jump";
                 SoundManager.PlaySound("cloth1");
                 JumpButtonIsStillHeldDownTimer = 0.3f;
@@ -185,7 +197,7 @@ namespace NinjaGame
             else if (!OnGround && JumpButtonIsStillHeldDownTimer > 0 && InputManager.CurrentAction.jump && InputManager.PreviousAction.jump)
             {
                 // Holding down jump to continue a jump.
-                this.velocity.Y = -250;
+                this.velocity.Y = -jumpSpeed;
                 JumpButtonIsStillHeldDownTimer -= elapsed;
             }
             else

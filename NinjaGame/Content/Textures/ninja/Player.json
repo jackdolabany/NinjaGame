@@ -1,0 +1,37 @@
+{
+	speed: 50.0,
+	jumpSpeed: 250.0,
+	animations: [
+	{
+		name: "idle",
+		texturePath: "ninja/idle",
+		frameWidth: 32,
+		fps: 10,
+		loop: true,
+		oscillate: false
+	},
+	{
+		name: "walk",
+		texturePath: "ninja/walk",
+		frameWidth: 48,
+		fps: 15,
+		loop: true,
+		oscillate: false
+	},
+	{
+		name: "jump",
+		texturePath: "ninja/jump",
+		frameWidth: 36,
+		fps: 10,
+		loop: false,
+		oscillate: false
+	},
+	{
+		name: "attack",
+		texturePath: "ninja/attack",
+		frameWidth: 48,
+		fps: 20,
+		loop: false,
+		oscillate: false
+	}]
+}

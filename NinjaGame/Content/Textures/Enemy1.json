@@ -1,0 +1,12 @@
+{
+	speed: 20.0,
+	animations: [
+	{
+		name: "idle",
+		texturePath: "EnemyIdle",
+		frameWidth: 32,
+		fps: 6,
+		loop: true,
+		oscillate: false
+	}]
+}

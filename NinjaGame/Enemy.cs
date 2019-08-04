@@ -85,6 +85,14 @@ namespace NinjaGame
             this.camera = camera;
         }
 
+        public CharacterConfig SetDisplayComponentFromConfig(ContentManager content)
+        {
+            var config = CharacterConfig.GetCharacterConfig($@"Content\Textures\{this.GetType().Name}.json");
+            var animationDisplay = CharacterConfig.GetAnimationDisplay(config, content);
+            this.DisplayComponent = animationDisplay;
+            return config;
+        }
+
         /// <summary>
         /// Used in the constructor to properly place enemies on the map.
         /// </summary>

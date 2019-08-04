@@ -9,19 +9,23 @@ namespace NinjaGame
     public class Enemy1 : Enemy
     {
 
-        AnimationDisplay animations;
+        AnimationDisplay animations => (AnimationDisplay)DisplayComponent;
+
+        private float speed;
 
         public Enemy1(ContentManager content, int cellX, int cellY, Player player, Camera camera)
             : base(content, cellX, cellY, player, camera)
         {
-            animations = new AnimationDisplay();
-            this.DisplayComponent = animations;
-            var idleTexture = content.Load<Texture2D>(@"Textures\EnemyIdle");
-            var idle = new AnimationStrip(idleTexture, 32, "idle");
+            //animations = new AnimationDisplay();
+            //this.DisplayComponent = animations;
+            //var idleTexture = content.Load<Texture2D>(@"Textures\EnemyIdle");
+            //var idle = new AnimationStrip(idleTexture, 32, "idle");
 
-            idle.LoopAnimation = true;
-            idle.FrameLength = 0.6f;
-            animations.Add(idle);
+            //idle.LoopAnimation = true;
+            //idle.FrameLength = 0.6f;
+            //animations.Add(idle);
+            var result = SetDisplayComponentFromConfig(content);
+            this.speed = result.Speed;
 
             animations.Play("idle");
             
@@ -61,7 +65,7 @@ namespace NinjaGame
             {
                 if (animations.currentAnimationName == "idle")
                 {
-                    this.velocity.X = 20;
+                    this.velocity.X = speed;
                     if (flipped)
                     {
                         this.velocity.X *= -1;
