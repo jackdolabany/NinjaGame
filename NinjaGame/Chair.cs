@@ -25,7 +25,6 @@ namespace NinjaGame
             _enemies = enemies;
             
             this.WorldLocation = new Vector2(x * TileMap.TileSize, y * TileMap.TileSize);
-            this.CollisionRectangle = new Rectangle(2, 1, 12, 15);
 
             SetCenteredCollisionRectangle(12, 20);
 

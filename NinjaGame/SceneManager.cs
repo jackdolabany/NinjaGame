@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using NinjaGame.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,6 +81,15 @@ namespace NinjaGame
                             {
                                 var barrel = new Chair(contentManager, x, y, player, level.Enemies);
                                 level.GameObjects.Add(barrel);
+                            }
+                            else if (loadClass.StartsWith("Platform."))
+                            {
+                                // Use reflection to load the platform.
+                                string classname = loadClass.Split('.')[1];
+                                Type t = Type.GetType(typeof(Platform).Namespace + "." + classname);
+                                Platform platform = (Platform)Activator.CreateInstance(t, new object[] { contentManager, x, y });
+                                level.Platforms.Add(platform);
+                                //layerDepthObjects[z].Add(platform);
                             }
                         }
                     }

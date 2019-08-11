@@ -75,6 +75,9 @@
     <Compile Include="GameObjectCircularBuffer.cs" />
     <Compile Include="GameObjectPool.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="Platforms\StaticPlatform.cs" />
+    <Compile Include="Platforms\FallingPlatform.cs" />
+    <Compile Include="Platforms\Platform.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="SceneManager.cs" />
     <Compile Include="Player.cs" />

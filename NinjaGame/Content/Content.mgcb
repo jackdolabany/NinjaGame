@@ -235,6 +235,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/ninja/walk.png
 
+#begin Textures/Platforms.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Platforms.png
+
 #begin Textures/SimpleSprites.png
 /importer:TextureImporter
 /processor:TileImageProcessor

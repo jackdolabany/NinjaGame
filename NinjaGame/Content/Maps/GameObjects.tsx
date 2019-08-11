@@ -21,4 +21,14 @@
    <property name="LoadClass" value="Barrel"/>
   </properties>
  </tile>
+ <tile id="4">
+  <properties>
+   <property name="LoadClass" value="Platform.StaticPlatform"/>
+  </properties>
+ </tile>
+ <tile id="5">
+  <properties>
+   <property name="LoadClass" value="Platform.FallingPlatform"/>
+  </properties>
+ </tile>
 </tileset>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NinjaGame.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace NinjaGame
         public List<Enemy> Enemies;
         public List<KillPlayerCell> killPlayerCells;
         public List<GameObject> GameObjects;
+        public List<Platform> Platforms;
 
         public Level(Player player, TileMap map, Camera camera)
         {
@@ -28,14 +30,23 @@ namespace NinjaGame
             Map = map;
             Camera = camera;
             Enemies = new List<Enemy>();
+            Platforms = new List<Platform>();
             killPlayerCells = new List<KillPlayerCell>();
             GameObjects = new List<GameObject>();
         }
 
         public void Update(GameTime gameTime, float elapsed)
         {
+
+            foreach (var p in Platforms)
+            {
+                p.Update(gameTime, elapsed);
+            }
+
             Player.Update(gameTime, elapsed);
+
             Camera.Position = Player.WorldLocation;
+
             foreach (var enemy in Enemies)
             {
                 enemy.Update(gameTime, elapsed);
@@ -80,8 +91,15 @@ namespace NinjaGame
 
         public void Draw(SpriteBatch spriteBatch, Rectangle scaledViewPort)
         {
-            Player.Draw(spriteBatch);
             Map.Draw(spriteBatch, scaledViewPort);
+
+            foreach (var p in Platforms)
+            {
+                p.Draw(spriteBatch);
+            }
+
+            Player.Draw(spriteBatch);
+
             foreach (var enemy in Enemies)
             {
                 enemy.Draw(spriteBatch);

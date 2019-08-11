@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using NinjaGame.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TileEngine;
 
 namespace NinjaGame
@@ -13,7 +12,6 @@ namespace NinjaGame
     {
         protected Vector2 worldLocation;
 
-        private bool enabled;
         private bool _flipped = false;
         protected bool flipped
         {
@@ -52,6 +50,14 @@ namespace NinjaGame
         protected bool onCeiling;
         protected bool onLeftWall;
         protected bool onRightWall;
+
+        public Platform PlatformThatThisIsOn;
+
+        /// <summary>
+        /// A single platform that this game object won't consider. You can use this to jump
+        /// down from a platform. Esp if that platform is moving down.
+        /// </summary>
+        public List<Platform> PoisonPlatforms = new List<Platform>(2);
 
         protected Rectangle collisionRectangle;
 
@@ -105,11 +111,7 @@ namespace NinjaGame
             set { this.DisplayComponent.Scale = value; }
         }
 
-        public bool Enabled
-        {
-            get { return enabled; }
-            set { enabled = value; }
-        }
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// If this is true the gameObject can move outside the bounds of the game world.
@@ -308,7 +310,7 @@ namespace NinjaGame
             }
 
             // Sorry for the player hack :(
-            bool isPlayer = this is Player;
+            //bool isPlayer = this is Player;
 
             for (int i = 0; i <= pixelCount - 1; i++)
             {
@@ -402,7 +404,7 @@ namespace NinjaGame
                 }
             }
 
-            //Platform newPlatform = null;
+            Platform newPlatform = null;
 
             bool previouslyOnGround = onGround;
             onGround = false;
@@ -438,106 +440,112 @@ namespace NinjaGame
                     }
                     velocity.Y = 0;
                 }
-                //else
-                //{
+                else
+                {
 
-                //    // Test platforms!
-                //    if (IsAffectedByGravity && IsAffectedByPlatforms && isFalling)
-                //    {
-                //        foreach (var platform in LevelManager.Platforms)
-                //        {
-                //            if (!platform.enabled || platform == PoisonPlatform)
-                //            {
-                //                continue;
-                //            }
+                    // Test platforms!
+                    if (IsAffectedByGravity && IsAffectedByPlatforms && isFalling)
+                    {
+                        foreach (var platform in Game1.Platforms)
+                        {
 
-                //            var samePlatformAsBefore = (platform == PlatformThatThisIsOn);
+                            if (platform.IsAffectedByGravity)
+                            {
+                                continue;
+                            }
 
-                //            if (!samePlatformAsBefore)
-                //            {
-                //                var wasAbove = cachedCollisionRectangle.Bottom <= platform.PreviousLocation.Y;
-                //                if (!wasAbove)
-                //                {
-                //                    continue;
-                //                }
-                //            }
+                            if (!platform.Enabled || PoisonPlatforms.Contains(platform))
+                            {
+                                continue;
+                            }
 
-                //            var isPlatformBelowMe = platform.CollisionRectangle.Contains(new Point(pixel.X, pixel.Y + 1));
+                            var samePlatformAsBefore = (platform == PlatformThatThisIsOn);
 
-                //            // Special case for vertical moving platforms moving down, it may move faster than the GameObject
-                //            // so we need to lock the GameObject to the platform. We consider you on the platform if your X
-                //            // coordinates fall in range and if you didn't jump
-                //            bool isLockedOnVerticalMovingPlatform = false;
-                //            if (samePlatformAsBefore && platform.velocity.Y > 0)
-                //            {
-                //                isLockedOnVerticalMovingPlatform = pixel.X >= platform.CollisionRectangle.Left && pixel.X <= platform.CollisionRectangle.Right;
-                //            }
+                            if (!samePlatformAsBefore)
+                            {
+                                var wasAbove = cachedCollisionRectangle.Bottom <= platform.PreviousLocation.Y;
+                                if (!wasAbove)
+                                {
+                                    continue;
+                                }
+                            }
 
-                //            if (isPlatformBelowMe || isLockedOnVerticalMovingPlatform)
-                //            {
-                //                // They are on a platform.
-                //                newPlatform = platform;
-                //                onGround = true;
-                //                OnPlatform = true;
-                //                velocity.Y = 0;
-                //                if (samePlatformAsBefore)
-                //                {
-                //                    // Previous platform. The GameObject will be moved along with the platform outside of this function.
-                //                    moveAmount.Y = 0;
-                //                }
-                //                else
-                //                {
-                //                    // If a new platform was hit, adjust the position.
-                //                    moveAmount.Y = Math.Min(moveAmount.Y, platform.CollisionRectangle.Top - cachedCollisionRectangle.Bottom);
+                            var isPlatformBelowMe = platform.CollisionRectangle.Contains(new Point(pixel.X, pixel.Y + 1));
 
-                //                    if (!previouslyOnGround)
-                //                    {
-                //                        Landed = true;
-                //                        LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
-                //                    }
+                            // Special case for vertical moving platforms moving down, it may move faster than the GameObject
+                            // so we need to lock the GameObject to the platform. We consider you on the platform if your X
+                            // coordinates fall in range and if you didn't jump
+                            bool isLockedOnVerticalMovingPlatform = false;
+                            if (samePlatformAsBefore && platform.velocity.Y > 0)
+                            {
+                                isLockedOnVerticalMovingPlatform = pixel.X >= platform.CollisionRectangle.Left && pixel.X <= platform.CollisionRectangle.Right;
+                            }
 
-                //                }
-                //                break;
-                //            }
-                //        }
-                //    }
+                            if (isPlatformBelowMe || isLockedOnVerticalMovingPlatform)
+                            {
+                                // They are on a platform.
+                                newPlatform = platform;
+                                onGround = true;
+                                OnPlatform = true;
+                                velocity.Y = 0;
+                                if (samePlatformAsBefore)
+                                {
+                                    // Previous platform. The GameObject will be moved along with the platform outside of this function.
+                                    moveAmount.Y = 0;
+                                }
+                                else
+                                {
+                                    // If a new platform was hit, adjust the position.
+                                    moveAmount.Y = Math.Min(moveAmount.Y, platform.CollisionRectangle.Top - cachedCollisionRectangle.Bottom);
 
-                //    bool isPlayer = this is Player;
+                                    if (!previouslyOnGround)
+                                    {
+                                        Landed = true;
+                                        LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
+                                    }
 
-                //    // Check each collision block. Just some rectangles that can block spaces off
-                //    if (newPlatform == null)
-                //    {
-                //        foreach (var block in LevelManager.CollisionBlocks)
-                //        {
-                //            if (block.Enabled && ((!isPlayer && block.IsBlockingGameObjects) || (isPlayer && block.IsBlockingPlayer)) && block.Rectangle.Contains(pixel.X, pixel.Y) && block.Owner != this)
-                //            {
-                //                //there was a collision, place the object to the edge of the tile.
-                //                if (isFalling)
-                //                {
-                //                    if (!previouslyOnGround)
-                //                    {
-                //                        Landed = true;
-                //                        LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
-                //                    }
-                //                    moveAmount.Y = Math.Min(moveAmount.Y, block.Rectangle.Top - cachedCollisionRectangle.Bottom);
-                //                    onGround = true;
-                //                }
-                //                else
-                //                {
-                //                    //moving up!
-                //                    onCeiling = true;
-                //                    moveAmount.Y = Math.Max(moveAmount.Y, block.Rectangle.Bottom - cachedCollisionRectangle.Top + 1);
-                //                }
-                //                velocity.Y = 0;
-                //            }
-                //        }
-                //    }
-                //}
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    //bool isPlayer = this is Player;
+
+                    //// Check each collision block. Just some rectangles that can block spaces off
+                    //if (newPlatform == null)
+                    //{
+                    //    foreach (var block in LevelManager.CollisionBlocks)
+                    //    {
+                    //        if (block.Enabled && ((!isPlayer && block.IsBlockingGameObjects) || (isPlayer && block.IsBlockingPlayer)) && block.Rectangle.Contains(pixel.X, pixel.Y) && block.Owner != this)
+                    //        {
+                    //            //there was a collision, place the object to the edge of the tile.
+                    //            if (isFalling)
+                    //            {
+                    //                if (!previouslyOnGround)
+                    //                {
+                    //                    Landed = true;
+                    //                    LandingVelocity = Math.Max(LandingVelocity, this.velocity.Y);
+                    //                }
+                    //                moveAmount.Y = Math.Min(moveAmount.Y, block.Rectangle.Top - cachedCollisionRectangle.Bottom);
+                    //                onGround = true;
+                    //            }
+                    //            else
+                    //            {
+                    //                //moving up!
+                    //                onCeiling = true;
+                    //                moveAmount.Y = Math.Max(moveAmount.Y, block.Rectangle.Bottom - cachedCollisionRectangle.Top + 1);
+                    //            }
+                    //            velocity.Y = 0;
+                    //        }
+                    //    }
+                    //}
+                }
             }
 
             Landed = Landed && ((afterMoveRect.Y - cachedCollisionRectangle.Y) > 5);
 
-            //PlatformThatThisIsOn = newPlatform;
+            PlatformThatThisIsOn = newPlatform;
             return moveAmount;
         }
 
@@ -553,7 +561,7 @@ namespace NinjaGame
 
         public virtual void Update(GameTime gameTime, float elapsed)
         {
-            if (!enabled)
+            if (!Enabled)
                 return;
 
             Vector2 previousLocation = this.worldLocation;
@@ -574,7 +582,7 @@ namespace NinjaGame
 
             Vector2 moveAmount = Velocity * elapsed;
 
-            //var previousUpdatePlatForm = PlatformThatThisIsOn;
+            var previousUpdatePlatForm = PlatformThatThisIsOn;
 
             if (isTileColliding)
             {
@@ -632,7 +640,7 @@ namespace NinjaGame
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if (enabled)
+            if (Enabled)
             {
                 this.DisplayComponent.Draw(spriteBatch);
             }

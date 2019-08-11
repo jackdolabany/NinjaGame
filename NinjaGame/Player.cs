@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NinjaGame.Platforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,26 +83,16 @@ namespace NinjaGame
             this.IsAffectedByForces = false;
             this.isEnemyTileColliding = false;
 
-            // Temp
             this.IsAffectedByGravity = true;
-            //this.RotationsPerSecond = 0.5f;
 
-            this.IsAffectedByPlatforms = false;
+            this.IsAffectedByPlatforms = true;
 
-            SetCenteredCollisionRectangle(16, 26);
-
-            //AttackRectangle = new Rectangle(10, 5, 10, 10);
-
-            //this.Scale = 3;
-
-            //animations.Play("idle");
+            this.CollisionRectangle = new Rectangle(-5, -27, 10, 26);
 
             InputManager = inputManager;
             _deadMenu = deadMenu;
 
         }
-
-
 
         public override void Update(GameTime gameTime, float elapsed)
         {
@@ -177,7 +168,7 @@ namespace NinjaGame
                     nextAnimation = "walk";
                 }
             }
-            if (InputManager.CurrentAction.right && !InputManager.CurrentAction.left)
+            else if (InputManager.CurrentAction.right && !InputManager.CurrentAction.left)
             {
                 this.velocity.X = speed;
                 if (OnGround)
@@ -186,9 +177,28 @@ namespace NinjaGame
                 }
             }
 
-            // Jump.
-            if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump && OnGround)
+            if (OnGround)
             {
+                PoisonPlatforms.Clear();
+            }
+
+            if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump && InputManager.CurrentAction.down && OnPlatform)
+            {
+                // Jump down from platform(s). Find every platform below the player and mark them all as poison.
+                var belowPlayerRect = new Rectangle(this.CollisionRectangle.Left, this.CollisionRectangle.Bottom, this.CollisionRectangle.Width, 3);
+
+                foreach (var platform in Game1.Platforms)
+                {
+                    if (belowPlayerRect.Intersects(platform.CollisionRectangle))
+                    {
+                        this.PoisonPlatforms.Add(platform);
+                    }
+                }
+
+            }
+            else if (InputManager.CurrentAction.jump && !InputManager.PreviousAction.jump && OnGround)
+            {
+                // Regular jump.
                 this.velocity.Y = -jumpSpeed;
                 nextAnimation = "jump";
                 SoundManager.PlaySound("cloth1");

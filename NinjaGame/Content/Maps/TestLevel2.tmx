@@ -30,7 +30,7 @@
  </layer>
  <layer id="5" name="objects" width="50" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACu3TywmAMAwA0NqDo7iNn6lcwXW9FDxYkBa1Iu9dEkhIckkIAAAA8Jy19QHwYf7jf/qC3jEe+ZLyOcUpnvtrXc3K1Yf71kMzW/f+zh3GKRdrcBcAAA==
+   H4sIAAAAAAAACu3TUQqAIAyA4bUHj9JtKvNQXaHr9pAPoUII6gr+D4YDxU2GIgAAAAAA9HNYNwBzu96BnMX/SOcRNI8/zuwrPbuKs8ujXx/zLa5rw7e83VXan9uVB8yc0/iaF4ukKVRwFwAA
   </data>
  </layer>
  <layer id="8" name="collisions" width="50" height="30" opacity="0.13">

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using NinjaGame.Platforms;
 using System;
+using System.Collections.Generic;
 using TileEngine;
 
 namespace NinjaGame
@@ -36,6 +38,14 @@ namespace NinjaGame
         private static SceneManager sceneManager;
 
         private static Level currentLevel;
+
+        public static IEnumerable<Platform> Platforms
+        {
+            get
+            {
+                return currentLevel.Platforms;
+            }
+        }
 
         public static TileMap CurrentMap
         {
@@ -315,7 +325,7 @@ namespace NinjaGame
                 case GameState.Playing:
                 case GameState.Paused:
 
-                    spriteBatch.Begin(SpriteSortMode.BackToFront,
+                    spriteBatch.Begin(SpriteSortMode.Deferred,
                         BlendState.AlphaBlend,
                         SamplerState.PointClamp,
                         null,
