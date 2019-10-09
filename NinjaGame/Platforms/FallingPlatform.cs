@@ -15,7 +15,7 @@ namespace NinjaGame.Platforms
         public FallingPlatform(ContentManager content, int cellX, int cellY)
            : base(content, cellX, cellY)
         {
-            this.DisplayComponent = new StaticImageDisplay(content.Load<Texture2D>(@"Textures/Platforms"), new Rectangle(16, 0, 16, 5));
+            this.DisplayComponent = new StaticImageDisplay(content.Load<Texture2D>(@"Textures/Platforms_Stone"), new Rectangle(16, 0, 16, 5));
             SetCenteredCollisionRectangle(16, 5);
 
             checkCollisionWithPlayerRect = new Rectangle(this.CollisionRectangle.X, this.CollisionRectangle.Y - 2, this.CollisionRectangle.Width, 2);
